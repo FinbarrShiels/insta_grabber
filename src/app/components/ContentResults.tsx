@@ -107,13 +107,15 @@ const ContentResults: React.FC<ContentResultsProps> = ({
       });
       
       // Determine the actual content type based on data
-      if (data.info.resources.length > 1) {
+      if (contentType === 'story') {
+        // If it's already identified as a story, keep that type
+        setActualContentType('story');
+      } else if (data.info.resources.length > 1) {
         setActualContentType('carousel');
       } else if (data.info.resources.length === 1) {
         const resourceType = data.info.resources[0].type;
         if (resourceType === 'video') {
           // Try to determine if it's a reel or regular video
-          // This is a simplified approach - your actual logic might be more complex
           setActualContentType(contentType === 'reel' ? 'reel' : 'video');
         } else if (resourceType === 'image') {
           setActualContentType('photo');
@@ -181,7 +183,7 @@ const ContentResults: React.FC<ContentResultsProps> = ({
       ) : data?.info ? (
         <div className="space-y-4" ref={resultsRef}>
           {/* Media Preview */}
-          <MediaPreview data={data.info} />
+          <MediaPreview data={data.info} contentType={actualContentType} />
           
           {/* Caption */}
           {data.info?.description && (
@@ -207,7 +209,10 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   );
 };
 
-const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
+const MediaPreview: React.FC<{ 
+  data: ContentInfo;
+  contentType: string;
+}> = ({ data, contentType }) => {
   const [itemDownloadStatus, setItemDownloadStatus] = useState<Record<number, boolean>>({});
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -321,8 +326,8 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
     return <p className="text-white/80">No media preview available</p>;
   }
 
-  // Check if it's a story content type - check the data type passed from the parent component
-  if ('type' in data && data.type === 'story') {
+  // Check if it's a story content type from parent or data
+  if (contentType === 'story' || ('type' in data && data.type === 'story')) {
     return (
       <StoryGrid 
         resources={data.resources}
