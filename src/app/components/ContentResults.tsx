@@ -287,6 +287,24 @@ const MediaPreview: React.FC<{
     }
   };
 
+  // Add this utility function for generating filenames
+  const generateFilename = (prefix: string, index?: number, extension?: string): string => {
+    // Use data.title (shortcode) or username if available, or fallback to prefix
+    let baseId = prefix;
+    
+    if (data.title) {
+      baseId = data.title;
+    } else if (data.owner?.username) {
+      baseId = data.owner.username;
+    }
+    
+    const safeId = baseId.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 30);
+    const indexPart = index !== undefined ? `-${index + 1}` : '';
+    const ext = extension || 'jpg';
+    
+    return `instagram-${safeId}${indexPart}.${ext}`;
+  };
+
   // Replace the handleDownload function
   const handleDownload = async (url: string, filename: string, index: number, type: 'image' | 'video') => {
     try {
@@ -295,16 +313,26 @@ const MediaPreview: React.FC<{
       // Get the R2 URL for the media
       const r2Url = await getR2MediaUrl(url, type, data.title || 'item');
       
+      // Use fetch to download the file instead of opening a new tab
+      const response = await fetch(r2Url);
+      const blob = await response.blob();
+      
+      // Create a blob URL
+      const blobUrl = URL.createObjectURL(blob);
+      
       // Create a temporary link element
       const link = document.createElement('a');
-      link.href = r2Url;
+      link.href = blobUrl;
       link.download = filename;
-      link.target = '_blank';
+      link.style.display = 'none';
       
       // Append to body, click, and cleanup
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // Clean up the blob URL
+      URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error('Download error:', err);
       alert('Failed to download media. Please try again.');
@@ -319,7 +347,7 @@ const MediaPreview: React.FC<{
       const type = url.toLowerCase().endsWith('.mp4') ? 'video' : 'image';
       await handleDownload(
         url, 
-        `instagram-story-${index}.${type === 'video' ? 'mp4' : 'jpg'}`, 
+        generateFilename('story', index, type === 'video' ? 'mp4' : 'jpg'), 
         index,
         type
       );
@@ -433,8 +461,8 @@ const MediaPreview: React.FC<{
                   : 'bg-purple-600 hover:bg-purple-700'
               } text-white flex items-center gap-2 shadow-md`}
               onClick={() => handleDownload(
-                videoResource.url, 
-                `instagram-video-${data.title || 'download'}.mp4`, 
+                videoResource.url,
+                generateFilename('video', undefined, 'mp4'),
                 videoIndex,
                 videoResource.type
               )}
@@ -537,8 +565,8 @@ const MediaPreview: React.FC<{
                           className={`px-3 py-1 text-sm ${itemDownloadStatus[resourceIndex] ? 
                             'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
                           onClick={() => handleDownload(
-                            resource.url, 
-                            `instagram-${data.title || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                            resource.url,
+                            generateFilename('photo', index, resource.type === 'video' ? 'mp4' : 'jpg'),
                             resourceIndex,
                             resource.type
                           )}
@@ -585,7 +613,7 @@ const MediaPreview: React.FC<{
                   if (resource.url) {
                     handleDownload(
                       resource.url,
-                      `instagram-album-${data.title || 'download'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                      generateFilename('carousel', index, resource.type === 'video' ? 'mp4' : 'jpg'),
                       index,
                       resource.type
                     );
@@ -659,8 +687,8 @@ const MediaPreview: React.FC<{
                   itemDownloadStatus[index] ? 'bg-green-600' : 'bg-purple-600 hover:bg-purple-700'
                 } text-white rounded-md flex items-center justify-center gap-1`}
                 onClick={() => handleDownload(
-                  resource.url, 
-                  `instagram-${data.title || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                  resource.url,
+                  generateFilename('photo', index, resource.type === 'video' ? 'mp4' : 'jpg'),
                   index,
                   resource.type
                 )}

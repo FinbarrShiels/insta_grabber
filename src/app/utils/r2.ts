@@ -60,10 +60,18 @@ export async function uploadToR2(
 }
 
 /**
+ * Generate a random 4-digit code for uniqueness
+ * @returns A 4-digit random code
+ */
+function generateRandomCode(): string {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
+/**
  * Store Instagram media in R2 and return a presigned URL
  * @param url Instagram media URL
  * @param type Media type ('image' or 'video')
- * @param postId Post identifier
+ * @param postId Post identifier (shortcode or username)
  * @returns Presigned URL for accessing the stored media
  */
 export async function storeAndGetMediaUrl(
@@ -72,10 +80,13 @@ export async function storeAndGetMediaUrl(
   postId: string
 ): Promise<string> {
   try {
+    // Clean postId to ensure it's valid for a filename
+    const safePostId = postId.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50);
+    
     // Generate a unique key for the media file
     const extension = type === 'image' ? 'jpg' : 'mp4';
-    const timestamp = Date.now();
-    const key = `${postId}/${timestamp}.${extension}`;
+    const randomCode = generateRandomCode();
+    const key = `${safePostId}-${randomCode}.${extension}`;
     
     // Fetch the content from Instagram
     const response = await fetch(url);
