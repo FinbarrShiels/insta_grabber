@@ -98,3 +98,30 @@ a, button, [role="button"], label[for], select, summary {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Add or update these global CSS styles to improve contrast */
+@layer base {
+  /* Improve text contrast */
+  body {
+    @apply text-white;
+  }
+  
+  /* Improve color contrast for various text states */
+  .text-white\/80, .text-white\/70, .text-white\/60 {
+    @apply text-white;
+  }
+  
+  .text-pink-100 {
+    @apply text-white;
+  }
+  
+  /* Strengthen background opacity for better contrast */
+  .bg-white\/5, .bg-white\/10 {
+    @apply bg-white/15;
+  }
+  
+  /* Add more definition to containers with shadow */
+  .bg-white\/10, .bg-white\/15, .bg-white\/20 {
+    @apply shadow-md;
+  }
+}

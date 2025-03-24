@@ -103,19 +103,19 @@ const FaqPage: React.FC = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-pink-100 max-w-2xl mx-auto">
+          <p className="text-white text-sm md:text-base max-w-2xl mx-auto">
             Find answers to common questions about using InstaGrab to download Instagram photos, videos, reels, and stories.
           </p>
         </div>
         
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 mb-8 shadow-lg">
           {faqItems.map((item, index) => (
             <div key={index} className="mb-4 last:mb-0">
               <button
                 className={`w-full text-left p-4 rounded-lg flex items-center justify-between transition-colors ${
                   expandedIndex === index 
-                    ? 'bg-white/20 text-white' 
-                    : 'bg-white/5 text-white/90 hover:bg-white/10'
+                    ? 'bg-white/25 text-white' 
+                    : 'bg-white/10 text-white hover:bg-white/15'
                 }`}
                 onClick={() => toggleExpanded(index)}
               >
@@ -132,7 +132,7 @@ const FaqPage: React.FC = () => {
               </button>
               
               {expandedIndex === index && (
-                <div className="mt-2 p-4 bg-white/5 rounded-lg text-white/80">
+                <div className="mt-2 p-4 bg-white/10 rounded-lg text-white">
                   {item.answer}
                 </div>
               )}
@@ -140,14 +140,14 @@ const FaqPage: React.FC = () => {
           ))}
         </div>
         
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 shadow-lg">
           <h2 className="text-xl font-semibold text-white mb-4">Still have questions?</h2>
-          <p className="text-white/80 mb-4">
+          <p className="text-white mb-4">
             If you couldn&apos;t find the answer to your question, feel free to contact us. We&apos;re here to help!
           </p>
           <a 
             href="mailto:support@instagrab.com" 
-            className="inline-block px-6 py-3 bg-white text-purple-600 rounded-lg font-medium hover:bg-pink-100 transition-colors"
+            className="inline-block px-6 py-3 bg-white text-purple-700 rounded-lg font-medium hover:bg-pink-100 transition-colors"
           >
             Contact Support
           </a>

@@ -148,8 +148,8 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   if (loading) {
     return (
       <div className="p-6 max-w-[900px] mx-auto flex flex-col items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-200 mb-4"></div>
-        <p className="text-white/80">Fetching content from Instagram...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white mb-4"></div>
+        <p className="text-white">Fetching content from Instagram...</p>
       </div>
     );
   }
@@ -162,16 +162,16 @@ const ContentResults: React.FC<ContentResultsProps> = ({
     <div className="p-6 max-w-[900px] mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-white">Download Results</h2>
-        <div className="flex items-center gap-1.5 text-xs text-pink-200 bg-pink-200/20 px-3 py-1.5 rounded-full">
+        <div className="flex items-center gap-1.5 text-xs text-white bg-pink-500/30 px-3 py-1.5 rounded-full">
           {getContentIcon(actualContentType)}
           <span>{actualContentType.toUpperCase()}</span>
         </div>
       </div>
       
       {propsError ? (
-        <div className="bg-red-500/20 rounded-lg p-4 mb-4 flex items-center gap-3">
-          <ExclamationCircleIcon className="h-6 w-6 text-red-300 flex-shrink-0" />
-          <p className="text-sm text-white/90">{propsError}</p>
+        <div className="bg-red-600/30 rounded-lg p-4 mb-4 flex items-center gap-3">
+          <ExclamationCircleIcon className="h-6 w-6 text-white flex-shrink-0" />
+          <p className="text-sm text-white">{propsError}</p>
         </div>
       ) : data?.info ? (
         <div className="space-y-4" ref={resultsRef}>
@@ -180,22 +180,22 @@ const ContentResults: React.FC<ContentResultsProps> = ({
           
           {/* Caption */}
           {data.info?.description && (
-            <div className="bg-white/10 rounded-lg p-4">
-              <p className="text-sm text-white/80">{data.info.description}</p>
+            <div className="bg-white/15 rounded-lg p-4 shadow-md">
+              <p className="text-sm text-white">{data.info.description}</p>
             </div>
           )}
           
           {/* User info if available */}
           {data.info?.owner && (
-            <div className="bg-white/10 rounded-lg p-4">
-              <p className="text-xs text-white/60 mb-1">Posted by</p>
-              <p className="text-sm text-white/80">{data.info.owner.full_name} (@{data.info.owner.username})</p>
+            <div className="bg-white/15 rounded-lg p-4 shadow-md">
+              <p className="text-xs text-white mb-1">Posted by</p>
+              <p className="text-sm text-white">{data.info.owner.full_name} (@{data.info.owner.username})</p>
             </div>
           )}
         </div>
       ) : (
-        <div className="bg-white/10 rounded-lg p-4 mb-4">
-          <p className="text-sm text-white/80 break-all">{submittedUrl}</p>
+        <div className="bg-white/15 rounded-lg p-4 mb-4 shadow-md">
+          <p className="text-sm text-white break-all">{submittedUrl}</p>
         </div>
       )}
     </div>

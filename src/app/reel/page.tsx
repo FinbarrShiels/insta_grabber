@@ -88,9 +88,9 @@ export default function ReelDownloaderPage() {
         {/* Hero Section */}
         <div className="text-center py-8 md:py-12">
           <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 whitespace-nowrap xs:whitespace-normal">
-            Instagram <span className="text-pink-200">Reel Downloader</span>
+            Instagram <span className="text-white">Reel Downloader</span>
           </h1>
-          <p className="text-pink-100 text-sm md:text-base max-w-[900px] mx-auto">
+          <p className="text-white text-sm md:text-base text-sm md:text-base max-w-[900px] mx-auto">
             Download Instagram Reels in HD quality without watermarks
           </p>
         </div>

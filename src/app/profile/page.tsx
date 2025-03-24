@@ -29,7 +29,7 @@ export default function ProfileDownloaderPage() {
           <div className="text-center mb-10">
             {/* Title */}
             <h1 className="text-4xl sm:text-6xl font-bold text-white mb-4">
-              Instagram <span className="text-pink-200">Profile Downloader</span>
+              Instagram <span className="text-white">Profile Downloader</span>
             </h1>
             
             {/* Subtitle */}
@@ -53,7 +53,7 @@ export default function ProfileDownloaderPage() {
             <div className="glass-effect rounded-xl p-6 shadow-lg max-w-2xl mx-auto">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-white">Download Results</h2>
-                <span className="text-xs text-pink-200 bg-pink-200/20 px-3 py-1 rounded-full">
+                <span className="text-xs text-white bg-pink-200/20 px-3 py-1 rounded-full">
                   {activeTab.toUpperCase()}
                 </span>
               </div>

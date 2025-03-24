@@ -42,14 +42,14 @@ const UrlInputForm: React.FC<UrlInputFormProps> = ({ onSubmit }) => {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste Instagram link here"
-          className="w-full px-5 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 text-white placeholder:text-white/70 pr-36 shadow-lg"
+          className="w-full px-5 py-4 bg-white/25 backdrop-blur-sm border border-white/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-white text-white placeholder:text-white pr-36 shadow-lg"
         />
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
           {url ? (
             <button
               type="button"
               onClick={handleClear}
-              className="p-2 text-white/70 hover:text-white transition-colors rounded-lg flex items-center gap-1 px-3 hover:bg-white/10"
+              className="p-2 text-white hover:text-white transition-colors rounded-lg flex items-center gap-1 px-3 hover:bg-white/20"
             >
               <XMarkIcon className="w-5 h-5" />
               <span className="text-sm">Clear</span>
@@ -58,7 +58,7 @@ const UrlInputForm: React.FC<UrlInputFormProps> = ({ onSubmit }) => {
             <button
               type="button"
               onClick={handlePaste}
-              className="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg flex items-center gap-1 px-3 cursor-pointer hover:bg-white/20"
+              className="p-2 text-white hover:text-white transition-colors bg-white/20 rounded-lg flex items-center gap-1 px-3 cursor-pointer hover:bg-white/30"
             >
               <ClipboardDocumentIcon className="h-5 w-5" />
               <span className="text-sm">Paste</span>
@@ -72,8 +72,8 @@ const UrlInputForm: React.FC<UrlInputFormProps> = ({ onSubmit }) => {
         disabled={!url.trim() || isLoading}
         className={`px-5 py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md font-medium w-full
           ${!url.trim() || isLoading 
-            ? 'bg-white/50 text-purple-800 cursor-not-allowed' 
-            : 'bg-white hover:bg-pink-100 text-purple-600 hover:text-purple-700 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg'
+            ? 'bg-white/60 text-purple-900 cursor-not-allowed' 
+            : 'bg-white hover:bg-pink-100 text-purple-800 hover:text-purple-900 cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg'
           }`}
       >
         {isLoading ? (
@@ -86,7 +86,7 @@ const UrlInputForm: React.FC<UrlInputFormProps> = ({ onSubmit }) => {
           </>
         ) : (
           <>
-            <ArrowDownTrayIcon className="h-5 w-5" />
+            <ArrowDownTrayIcon className="h-5 w-5 animate-bounce-subtle" />
             <span>Download</span>
           </>
         )}
