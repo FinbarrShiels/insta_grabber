@@ -11,7 +11,8 @@ import {
   ViewColumnsIcon,
   ExclamationCircleIcon,
   PlayIcon,
-  PauseIcon
+  PauseIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import dynamic from 'next/dynamic';
 import ReactPlayer from 'react-player';
@@ -49,6 +50,38 @@ interface ContentResultsProps {
   data: ContentData | null;
   contentType: string;
 }
+
+// Add Modal component at the top level
+const ImageModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  imageUrl: string;
+  alt: string;
+}> = ({ isOpen, onClose, imageUrl, alt }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+      <div className="relative max-w-4xl w-full mx-4">
+        <button
+          onClick={onClose}
+          className="absolute -top-12 right-0 text-white hover:text-white/80 transition-colors"
+        >
+          <XMarkIcon className="h-8 w-8" />
+        </button>
+        <div className="relative aspect-square w-full">
+          <Image
+            src={imageUrl}
+            alt={alt}
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ContentResults: React.FC<ContentResultsProps> = ({
   submittedUrl,
@@ -161,6 +194,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const playerRef = useRef<ReactPlayer>(null);
   
   // Create a helper function to proxy URLs
@@ -514,9 +548,9 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
         </div>
       )}
       
-      <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      <div className="mt-2 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
         {data.resources.map((resource: Resource, index: number) => (
-          <div key={index} className="overflow-hidden border border-white/20 rounded-md shadow-md bg-black/20">
+          <div key={index} className="overflow-hidden border border-white/20 rounded-lg shadow-md bg-black/20">
             <div className="p-0">
               {resource.type === 'video' ? (
                 <div 
@@ -550,31 +584,28 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                   </div>
                 </div>
               ) : (
-                resource.url ? (
-                  <div className="relative h-60 w-full">
+                <div 
+                  className="relative aspect-square w-full cursor-pointer"
+                  onClick={() => setSelectedImage(index)}
+                >
+                  {resource.url ? (
                     <Image
                       src={resource.url}
                       alt={`Content preview ${index + 1}`}
                       fill
                       className="object-cover"
                     />
-                  </div>
-                ) : (
-                  <p className="p-4 text-center text-white/50">Image preview not available</p>
-                )
+                  ) : (
+                    <p className="p-4 text-center text-white/50">Image preview not available</p>
+                  )}
+                </div>
               )}
             </div>
-            <div className="p-3 flex justify-between">
-              <button
-                className="px-3 py-1 text-sm border border-white/10 text-white/80 rounded-md hover:bg-white/5"
-                onClick={() => window.open(resource.url, '_blank')}
-                disabled={!resource.url}
-              >
-                Open
-              </button>
+            <div className="p-3 flex justify-center">
               <button 
-                className={`px-3 py-1 text-sm ${itemDownloadStatus[index] ? 
-                  'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
+                className={`w-full px-4 py-2 text-sm ${
+                  itemDownloadStatus[index] ? 'bg-green-600' : 'bg-purple-600 hover:bg-purple-700'
+                } text-white rounded-md flex items-center justify-center gap-1`}
                 onClick={() => handleDownload(
                   resource.url, 
                   `instagram-${data.title || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
@@ -598,6 +629,16 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
           </div>
         ))}
       </div>
+
+      {/* Image Modal */}
+      {selectedImage !== null && (
+        <ImageModal
+          isOpen={selectedImage !== null}
+          onClose={() => setSelectedImage(null)}
+          imageUrl={data.resources[selectedImage].url}
+          alt={`Content preview ${selectedImage + 1}`}
+        />
+      )}
     </div>
   );
 };
