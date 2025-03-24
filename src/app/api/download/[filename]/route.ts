@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
+type Props = {
+  params: {
+    filename: string;
+  };
+};
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: Props
 ) {
   try {
     const { filename } = params;
