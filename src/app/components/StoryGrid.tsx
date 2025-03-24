@@ -66,9 +66,8 @@ const StoryGrid: React.FC<StoryGridProps> = ({ resources, onDownload }) => {
   };
 
   return (
-    <div className="bg-white/10 rounded-lg p-4">
-      <h3 className="text-xl font-semibold text-white mb-4">Story Media</h3>
-      
+    <div>
+      {/* Display stories in a grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {resources.map((resource, index) => (
           <div 

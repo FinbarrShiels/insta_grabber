@@ -98,24 +98,17 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   useEffect(() => {
     if (data?.info?.resources) {
       console.log('Resources available:', data.info.resources.length);
-      data.info.resources.forEach((resource: Resource, index: number) => {
-        console.log(`Resource ${index}:`, resource.type, resource.url);
-        console.log(`Resource ${index} thumbnails:`, {
-          thumbnail: resource.thumbnail || 'none',
-          thumb: resource.thumb || 'none'
-        });
-      });
+      console.log('Content type from parent:', contentType);
       
-      // Determine the actual content type based on data
+      // Always preserve the 'story' type if it comes from the parent
       if (contentType === 'story') {
-        // If it's already identified as a story, keep that type
         setActualContentType('story');
+        console.log('Setting content type to story');
       } else if (data.info.resources.length > 1) {
         setActualContentType('carousel');
       } else if (data.info.resources.length === 1) {
         const resourceType = data.info.resources[0].type;
         if (resourceType === 'video') {
-          // Try to determine if it's a reel or regular video
           setActualContentType(contentType === 'reel' ? 'reel' : 'video');
         } else if (resourceType === 'image') {
           setActualContentType('photo');
@@ -327,7 +320,8 @@ const MediaPreview: React.FC<{
   }
 
   // Check if it's a story content type from parent or data
-  if (contentType === 'story' || ('type' in data && data.type === 'story')) {
+  if (contentType === 'story') {
+    console.log('Displaying story grid with resources:', data.resources);
     return (
       <StoryGrid 
         resources={data.resources}
