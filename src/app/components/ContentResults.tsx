@@ -272,44 +272,57 @@ const MediaPreview: React.FC<{
     setHasStartedPlaying(false);
   };
 
-  const handleDownload = async (url: string, filename: string, index: number) => {
+  // Create a helper function to get R2 URLs
+  const getR2MediaUrl = async (url: string, type: 'image' | 'video', postId: string): Promise<string> => {
+    try {
+      const response = await fetch(`/api/media?url=${encodeURIComponent(url)}&type=${type}&postId=${postId}`);
+      if (!response.ok) throw new Error('Failed to get R2 URL');
+      
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error('Error getting R2 URL:', error);
+      // Fallback to original URL if R2 fails
+      return url;
+    }
+  };
+
+  // Replace the handleDownload function
+  const handleDownload = async (url: string, filename: string, index: number, type: 'image' | 'video') => {
     try {
       setItemDownloadStatus(prev => ({ ...prev, [index]: true }));
       
-      // Fetch the video file
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch video');
-      
-      // Convert the response to a blob
-      const blob = await response.blob();
-      
-      // Create a blob URL
-      const blobUrl = window.URL.createObjectURL(blob);
+      // Get the R2 URL for the media
+      const r2Url = await getR2MediaUrl(url, type, data.title || 'item');
       
       // Create a temporary link element
       const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = filename || 'code.mp4'; // Use code.mp4 as default filename
+      link.href = r2Url;
+      link.download = filename;
+      link.target = '_blank';
       
       // Append to body, click, and cleanup
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      // Clean up the blob URL
-      window.URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error('Download error:', err);
-      alert('Failed to download video. Please try again.');
+      alert('Failed to download media. Please try again.');
     } finally {
       setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
     }
   };
 
-  // Handle download for StoryGrid
+  // Update the handleStoryDownload function
   const handleStoryDownload = async (url: string, index: number) => {
     try {
-      await handleDownload(url, `instagram-story-${index}.mp4`, index);
+      const type = url.toLowerCase().endsWith('.mp4') ? 'video' : 'image';
+      await handleDownload(
+        url, 
+        `instagram-story-${index}.${type === 'video' ? 'mp4' : 'jpg'}`, 
+        index,
+        type
+      );
     } catch (error) {
       console.error('Failed to download story:', error);
     }
@@ -422,7 +435,8 @@ const MediaPreview: React.FC<{
               onClick={() => handleDownload(
                 videoResource.url, 
                 `instagram-video-${data.title || 'download'}.mp4`, 
-                videoIndex
+                videoIndex,
+                videoResource.type
               )}
               disabled={itemDownloadStatus[videoIndex]}
             >
@@ -524,8 +538,9 @@ const MediaPreview: React.FC<{
                             'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
                           onClick={() => handleDownload(
                             resource.url, 
-                            `instagram-${data.title || 'item'}-${index + 1}.jpg`,
-                            resourceIndex
+                            `instagram-${data.title || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                            resourceIndex,
+                            resource.type
                           )}
                           disabled={!resource.url || itemDownloadStatus[resourceIndex]}
                         >
@@ -571,7 +586,8 @@ const MediaPreview: React.FC<{
                     handleDownload(
                       resource.url,
                       `instagram-album-${data.title || 'download'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
-                      index
+                      index,
+                      resource.type
                     );
                   }
                 }, index * 1000); // 1 second delay between downloads
@@ -645,7 +661,8 @@ const MediaPreview: React.FC<{
                 onClick={() => handleDownload(
                   resource.url, 
                   `instagram-${data.title || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
-                  index
+                  index,
+                  resource.type
                 )}
                 disabled={!resource.url || itemDownloadStatus[index]}
               >

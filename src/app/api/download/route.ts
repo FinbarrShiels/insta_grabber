@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { getPresignedDownloadUrl } from '@/app/utils/r2';
 
 interface DownloadRequest {
   url: string;
@@ -47,46 +48,30 @@ export async function POST(request: Request) {
 }
 
 // GET handler for retrieving the file
+export const runtime = 'edge';
+
 export async function GET(request: NextRequest) {
+  const key = request.nextUrl.searchParams.get('key');
+  const filename = request.nextUrl.searchParams.get('filename') || 'instagram-media';
+  
+  if (!key) {
+    return NextResponse.json(
+      { error: 'Key parameter is required' },
+      { status: 400 }
+    );
+  }
+  
   try {
-    const { searchParams } = new URL(request.url);
-    const filename = searchParams.get('filename');
-
-    if (!filename) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Filename is required' 
-      }, { status: 400 });
-    }
-
-    const filePath = path.join(process.cwd(), 'temp', filename);
-
-    // Check if file exists
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'File not found' 
-      }, { status: 404 });
-    }
-
-    // Read the file
-    const fileStream = fs.createReadStream(filePath);
+    // Generate a presigned URL from R2
+    const presignedUrl = await getPresignedDownloadUrl(key);
     
-    // Set appropriate headers
-    const headers = new Headers();
-    headers.set('Content-Type', 'application/octet-stream');
-    headers.set('Content-Disposition', `attachment; filename="${filename}"`);
-
-    // Return the file stream
-    return new NextResponse(fileStream as unknown as ReadableStream, {
-      headers
-    });
-
+    // Redirect to the presigned URL with correct Content-Disposition header
+    return NextResponse.redirect(presignedUrl);
   } catch (error) {
-    console.error('File retrieval error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to retrieve file' 
-    }, { status: 500 });
+    console.error('Error generating download link:', error);
+    return NextResponse.json(
+      { error: 'Failed to generate download link' },
+      { status: 500 }
+    );
   }
 } 
