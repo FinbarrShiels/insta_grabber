@@ -162,7 +162,6 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const playerRef = useRef<ReactPlayer>(null);
   
   // Create a helper function to proxy URLs
@@ -246,7 +245,6 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
       document.body.removeChild(link);
     } catch (err) {
       console.error('Download error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to download content');
     } finally {
       setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
     }
