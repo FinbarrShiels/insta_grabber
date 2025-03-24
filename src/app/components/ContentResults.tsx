@@ -322,7 +322,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   }
 
   // Check if it's a story content type - check the data type passed from the parent component
-  if ((data as any).type === 'story') {
+  if ('type' in data && data.type === 'story') {
     return (
       <StoryGrid 
         resources={data.resources}
