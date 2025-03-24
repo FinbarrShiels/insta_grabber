@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const API_KEY = process.env.INSTAGRAM_API_KEY;
 const API_ENDPOINT = 'https://instagram-looter2.p.rapidapi.com/post-dl';
