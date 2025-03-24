@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { InstagramApiResponse } from '../utils/api';
 import { 
   ArrowDownTrayIcon, 
   PhotoIcon, 
@@ -11,11 +10,7 @@ import {
   CameraIcon,
   ViewColumnsIcon,
   ExclamationCircleIcon,
-  ArrowRightIcon,
-  DocumentTextIcon,
   PlayIcon,
-  UserCircleIcon,
-  TicketIcon,
   PauseIcon
 } from '@heroicons/react/24/outline';
 import axios from 'axios';
@@ -48,12 +43,6 @@ interface ContentData {
   error?: string;
 }
 
-interface DownloadStatus {
-  loading: boolean;
-  error: string | null;
-  success: boolean;
-}
-
 interface ContentResultsProps {
   submittedUrl: string;
   loading: boolean;
@@ -69,12 +58,8 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   data,
   contentType
 }) => {
-  const [downloadStatus, setDownloadStatus] = useState<Record<number, boolean>>({});
-  const [error, setError] = useState<string | null>(propsError);
-  
   const resultsRef = useRef<HTMLDivElement>(null);
   
-  // Debug log when data changes
   useEffect(() => {
     if (data?.info?.resources) {
       console.log('Resources available:', data.info.resources.length);
@@ -95,17 +80,6 @@ const ContentResults: React.FC<ContentResultsProps> = ({
     } else {
       console.log('No resources found in data:', data);
     }
-    
-    // Log the raw API response as provided in the example
-    if (data) {
-      // Cast to any to access potential raw API properties not in the type definition
-      const rawData = data as any;
-      console.log('Raw API processing check:', {
-        thumb: rawData.thumb || 'N/A',
-        download_url: rawData.download_url || 'N/A',
-        type: rawData.type || 'N/A'
-      });
-    }
   }, [data]);
 
   const getContentIcon = (type: string) => {
@@ -125,35 +99,7 @@ const ContentResults: React.FC<ContentResultsProps> = ({
         return <PhotoIcon className="h-3.5 w-3.5" />;
     }
   };
-  
-  const handleDownload = async (url: string, filename: string, index: number) => {
-    try {
-      setDownloadStatus(prev => ({ ...prev, [index]: true }));
-      const response = await axios.post('/api/download', {
-        url,
-        contentType: url.includes('.mp4') ? 'video' : 'image',
-        filename
-      });
-      
-      if (response.data.error) {
-        throw new Error(response.data.error);
-      }
 
-      const downloadUrl = `/api/download?file=${encodeURIComponent(response.data.file)}`;
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (err) {
-      console.error('Download error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to download content');
-    } finally {
-      setDownloadStatus(prev => ({ ...prev, [index]: false }));
-    }
-  };
-  
   if (loading) {
     return (
       <div className="p-6 max-w-[900px] mx-auto flex flex-col items-center justify-center">
@@ -177,10 +123,10 @@ const ContentResults: React.FC<ContentResultsProps> = ({
         </div>
       </div>
       
-      {error ? (
+      {propsError ? (
         <div className="bg-red-500/20 rounded-lg p-4 mb-4 flex items-center gap-3">
           <ExclamationCircleIcon className="h-6 w-6 text-red-300 flex-shrink-0" />
-          <p className="text-sm text-white/90">{error}</p>
+          <p className="text-sm text-white/90">{propsError}</p>
         </div>
       ) : data?.info ? (
         <div className="space-y-4" ref={resultsRef}>
@@ -211,7 +157,6 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   );
 };
 
-// Display the media previews
 const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const [itemDownloadStatus, setItemDownloadStatus] = useState<Record<number, boolean>>({});
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
@@ -254,7 +199,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
       </div>
     );
   };
-  
+
   // Handle video click
   const handleVideoClick = (index: number) => {
     setSelectedVideo(index);
@@ -277,19 +222,6 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const handleVideoEnded = () => {
     setIsPlaying(false);
     setHasStartedPlaying(false);
-  };
-  
-  // Log the API response for debugging
-  useEffect(() => {
-    if (data && Object.keys(data).length > 0) {
-      console.log('Full API response data:', data);
-    }
-  }, [data]);
-
-  const handleVideoReady = () => {
-    if (playerRef.current) {
-      playerRef.current.seekTo(0);
-    }
   };
 
   const handleDownload = async (url: string, filename: string, index: number) => {
@@ -319,26 +251,6 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
       setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
     }
   };
-
-  useEffect(() => {
-    if (data?.resources) {
-      console.log('Resources available:', data.resources.length);
-      data.resources.forEach((resource: Resource, index: number) => {
-        console.log(`Resource ${index}:`, resource.type, resource.url);
-        // Also log thumbnail URL if available
-        if (resource.thumbnail) {
-          console.log(`Resource ${index} thumbnail:`, resource.thumbnail);
-        }
-      });
-    } else {
-      console.log('No resources found in data:', data);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    // Import react-player dynamically to avoid SSR issues
-    import('react-player/lazy');
-  }, []);
 
   if (!data?.resources || data.resources.length === 0) {
     return <p className="text-white/80">No media preview available</p>;
