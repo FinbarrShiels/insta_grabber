@@ -12,7 +12,9 @@ import {
   ExclamationCircleIcon,
   PlayIcon,
   PauseIcon,
-  XMarkIcon
+  XMarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import dynamic from 'next/dynamic';
 import ReactPlayer from 'react-player';
@@ -59,7 +61,11 @@ const ImageModal: React.FC<{
   onClose: () => void;
   imageUrl: string;
   alt: string;
-}> = ({ isOpen, onClose, imageUrl, alt }) => {
+  hasNavigation?: boolean;
+  onPrevious?: () => void;
+  onNext?: () => void;
+  positionText?: string;
+}> = ({ isOpen, onClose, imageUrl, alt, hasNavigation, onPrevious, onNext, positionText }) => {
   if (!isOpen) return null;
 
   return (
@@ -71,6 +77,19 @@ const ImageModal: React.FC<{
         >
           <XMarkIcon className="h-8 w-8" />
         </button>
+        
+        {hasNavigation && onPrevious && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onPrevious();
+            }}
+            className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition"
+          >
+            <ChevronLeftIcon className="h-8 w-8 text-white" />
+          </button>
+        )}
+        
         <div className="relative aspect-square w-full">
           <Image
             src={imageUrl}
@@ -78,8 +97,27 @@ const ImageModal: React.FC<{
             fill
             className="object-contain"
             priority
+            style={{ transform: "scale(1.25)" }}
           />
         </div>
+        
+        {hasNavigation && onNext && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onNext();
+            }}
+            className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition"
+          >
+            <ChevronRightIcon className="h-8 w-8 text-white" />
+          </button>
+        )}
+        
+        {positionText && (
+          <div className="absolute bottom-[-40px] left-0 right-0 text-center text-white">
+            {positionText}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -718,6 +756,24 @@ const MediaPreview: React.FC<{
           onClose={() => setSelectedImage(null)}
           imageUrl={data.resources[selectedImage].url}
           alt={`Content preview ${selectedImage + 1}`}
+          hasNavigation={itemCount > 1}
+          onPrevious={() => {
+            // Allow loop navigation
+            if (selectedImage !== null) {
+              setSelectedImage(
+                selectedImage === 0 ? itemCount - 1 : selectedImage - 1
+              );
+            }
+          }}
+          onNext={() => {
+            // Allow loop navigation
+            if (selectedImage !== null) {
+              setSelectedImage(
+                selectedImage === itemCount - 1 ? 0 : selectedImage + 1
+              );
+            }
+          }}
+          positionText={`${selectedImage + 1} of ${itemCount}`}
         />
       )}
     </div>
