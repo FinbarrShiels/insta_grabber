@@ -6,29 +6,69 @@ import TabNavigation from './components/TabNavigation';
 import UrlInputForm from './components/UrlInputForm';
 import ContentResults from './components/ContentResults';
 import Footer from './components/Footer';
-import { fetchInstagramContent, InstagramApiResponse } from './utils/api';
+import { fetchInstagramContent } from './utils/api';
+
+interface ContentData {
+  info: {
+    title: string;
+    description: string;
+    resources: Array<{
+      type: 'image' | 'video';
+      url: string;
+      thumb?: string;
+      thumbnail?: string;
+    }>;
+    owner?: {
+      username: string;
+      full_name: string;
+    };
+    created_at_utc?: string;
+  };
+  error?: string;
+}
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('video');
-  const [submittedUrl, setSubmittedUrl] = useState('');
+  const [activeTab, setActiveTab] = useState('carousel');
+  const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<InstagramApiResponse | null>(null);
+  const [data, setData] = useState<ContentData | null>(null);
 
-  const handleUrlSubmit = async (url: string) => {
-    setSubmittedUrl(url);
+  const handleUrlSubmit = async (submittedUrl: string) => {
+    setUrl(submittedUrl);
     setLoading(true);
     setError(null);
     setData(null);
-    
+
     try {
-      const response = await fetchInstagramContent(url);
-      setData(response);
-      if (response.status !== 'success') {
-        setError(response.message || 'Failed to fetch content.');
+      const response = await fetchInstagramContent(submittedUrl);
+      if (response.status === 'error') {
+        setError(response.message || 'Failed to fetch content');
+        return;
       }
+
+      // Transform the API response to match ContentData type
+      const transformedData: ContentData = {
+        info: {
+          title: response.info?.shortcode || 'Instagram Content',
+          description: response.info?.caption || '',
+          resources: (response.info?.resources || []).map(resource => ({
+            type: resource.type === 'video' ? 'video' : 'image',
+            url: resource.url,
+            thumb: resource.thumb,
+            thumbnail: resource.thumbnail
+          })),
+          owner: response.info?.owner ? {
+            username: response.info.owner.username,
+            full_name: response.info.owner.full_name
+          } : undefined,
+          created_at_utc: response.info?.created_at_utc
+        }
+      };
+
+      setData(transformedData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(err instanceof Error ? err.message : 'Failed to fetch content');
     } finally {
       setLoading(false);
     }
@@ -45,7 +85,7 @@ export default function Home() {
             Instagram <span className="text-pink-200">Downloader</span>
           </h1>
           <p className="text-pink-100 text-sm md:text-base max-w-[900px] mx-auto">
-            Download Instagram Videos, Photos, Reels, Stories & Carousel content easily
+            Download Instagram posts, reels, and stories in HD quality without watermarks
           </p>
         </div>
         
@@ -61,7 +101,7 @@ export default function Home() {
         
         {/* Results Section */}
         <ContentResults 
-          submittedUrl={submittedUrl}
+          submittedUrl={url}
           loading={loading}
           error={error}
           data={data}
