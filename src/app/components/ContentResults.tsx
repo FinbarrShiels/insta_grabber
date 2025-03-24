@@ -13,7 +13,6 @@ import {
   PlayIcon,
   PauseIcon
 } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import dynamic from 'next/dynamic';
 import ReactPlayer from 'react-player';
 
