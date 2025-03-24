@@ -5,54 +5,41 @@ import path from 'path';
 import { generateTempFilename } from '../../utils/api';
 
 // POST handler for downloading content
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { url, contentType, filename } = body;
-
-    if (!url || !contentType || !filename) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Missing required parameters' 
-      }, { status: 400 });
+    const { url, filename } = await request.json();
+    
+    if (!url || !filename) {
+      return NextResponse.json(
+        { error: 'URL and filename are required' },
+        { status: 400 }
+      );
     }
 
-    // Create temp directory if it doesn't exist
-    const tempDir = path.join(process.cwd(), 'temp');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir);
+    // Fetch the file from the source URL
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
     }
 
-    // Generate a unique filename
-    const tempFilename = generateTempFilename(contentType, filename);
-    const filePath = path.join(tempDir, tempFilename);
+    // Get the content type from the response
+    const contentType = response.headers.get('content-type') || 'application/octet-stream';
 
-    // Download the file
-    const response = await axios({
-      method: 'GET',
-      url: url,
-      responseType: 'stream'
+    // Create a new Response that streams the data
+    return new NextResponse(response.body, {
+      headers: {
+        'Content-Type': contentType,
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': response.headers.get('content-length') || '',
+      }
     });
-
-    // Create a write stream
-    const writer = fs.createWriteStream(filePath);
-
-    // Pipe the response data to the file
-    response.data.pipe(writer);
-
-    // Return the local file path
-    return NextResponse.json({ 
-      success: true, 
-      filePath: `/temp/${tempFilename}`,
-      filename: tempFilename
-    });
-
   } catch (error) {
     console.error('Download error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to download file' 
-    }, { status: 500 });
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to download file' },
+      { status: 500 }
+    );
   }
 }
 

@@ -104,35 +104,38 @@ const ContentResults: React.FC<ContentResultsProps> = ({
         [resourceId]: { loading: true, error: null, success: false }
       }));
       
-      // Call our server API to download the file
+      // Call our server API to stream the download
       const response = await axios.post('/api/download', {
         url,
-        contentType,
         filename
+      }, {
+        responseType: 'blob' // Important for handling the stream
       });
       
-      if (response.data.success && response.data.filePath) {
-        // Create a hidden iframe for the download
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = `/api/download?filename=${encodeURIComponent(response.data.filename)}`;
-        
-        // Add to document, wait for download to start, then clean up
-        document.body.appendChild(iframe);
-        
-        // Clean up after a short delay
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-          
-          // Update status to success
-          setDownloadStatus(prev => ({
-            ...prev,
-            [resourceId]: { loading: false, error: null, success: true }
-          }));
-        }, 1000);
-      } else {
-        throw new Error(response.data.error || 'Failed to prepare download');
-      }
+      // Create a blob from the response data
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      
+      // Create a URL for the blob
+      const downloadUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = filename;
+      
+      // Trigger the download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+      
+      // Update status to success
+      setDownloadStatus(prev => ({
+        ...prev,
+        [resourceId]: { loading: false, error: null, success: true }
+      }));
     } catch (err) {
       console.error('Download error:', err);
       
@@ -268,33 +271,35 @@ const MediaPreview = ({ data }: { data: any }) => {
     try {
       setItemDownloadStatus(prev => ({ ...prev, [index]: true }));
       
-      // Use the same download endpoint as the main download button
+      // Call our server API to stream the download
       const response = await axios.post('/api/download', {
         url,
-        filename,
-        contentType: data.info.type || 'video'
+        filename
+      }, {
+        responseType: 'blob' // Important for handling the stream
       });
       
-      if (response.data.success && response.data.filePath) {
-        // Create a hidden iframe for the download
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = `/api/download?filename=${encodeURIComponent(response.data.filename)}`;
-        
-        // Add to document, wait for download to start, then clean up
-        document.body.appendChild(iframe);
-        
-        // Clean up after a short delay
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-          
-          // Reset status after 3 seconds
-          setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
-        }, 1000);
-      } else {
-        console.error('Download failed:', response.data);
-        setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
-      }
+      // Create a blob from the response data
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      
+      // Create a URL for the blob
+      const downloadUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = filename;
+      
+      // Trigger the download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+      
+      // Reset status after 3 seconds
+      setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
     } catch (error) {
       console.error('Download error:', error);
       setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
