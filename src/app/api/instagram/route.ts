@@ -115,7 +115,7 @@ export async function POST(request: Request) {
           { status: 'error', error: errorData.message || 'API request failed' },
           { status: response.status }
         );
-      } catch (e) {
+      } catch (_) {
         return NextResponse.json(
           { status: 'error', error: `API request failed with status ${response.status}` },
           { status: response.status }
