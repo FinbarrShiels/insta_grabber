@@ -155,44 +155,53 @@ export async function POST(request: Request) {
 
     // Transform the response to match our application's expected format
     const resources: Resource[] = [];
-    const mediaItem = responseData.result[0];
     
-    // Determine content type based on the URLs
-    const isVideo = mediaItem.urls && mediaItem.urls[0] && mediaItem.urls[0].extension === 'mp4';
-    
-    // Handle video URLs
-    if (isVideo && mediaItem.urls.length > 0) {
-      for (const urlItem of mediaItem.urls) {
+    // Handle case when there might be multiple items (carousel post)
+    for (const mediaItem of responseData.result) {
+      // Determine content type based on the URLs
+      const isVideo = mediaItem.urls && mediaItem.urls[0] && mediaItem.urls[0].extension === 'mp4';
+      
+      // Handle video URLs
+      if (isVideo && mediaItem.urls.length > 0) {
+        for (const urlItem of mediaItem.urls) {
+          resources.push({
+            type: 'video',
+            url: urlItem.url,
+            thumbnail: mediaItem.pictureUrl
+          });
+        }
+      } 
+      // Handle image URLs
+      else if (mediaItem.pictureUrl) {
         resources.push({
-          type: 'video',
-          url: urlItem.url,
+          type: 'image',
+          url: mediaItem.pictureUrl,
           thumbnail: mediaItem.pictureUrl
         });
       }
-    } 
-    // Handle image URLs (if no video URLs found)
-    else if (mediaItem.pictureUrl) {
-      resources.push({
-        type: 'image',
-        url: mediaItem.pictureUrl,
-        thumbnail: mediaItem.pictureUrl
-      });
     }
+    
+    // Get the first item for metadata (title, shortcode, etc.)
+    const firstItem = responseData.result[0];
+    
+    // Determine if it's a carousel based on number of resources
+    const contentType = resources.length > 1 ? 'carousel' : 
+                        (resources[0]?.type === 'video' ? 'video' : 'image');
     
     // Build our response
     const result = {
       status: 'success',
       info: {
-        id: mediaItem.meta.shortcode,
-        type: isVideo ? 'video' : 'image',
-        shortcode: mediaItem.meta.shortcode,
-        caption: mediaItem.meta.title || '',
+        id: firstItem.meta.shortcode,
+        type: contentType,
+        shortcode: firstItem.meta.shortcode,
+        caption: firstItem.meta.title || '',
         resources,
         owner: {
           username: '',
           full_name: ''
         },
-        created_at_utc: new Date(mediaItem.meta.takenAt * 1000).toISOString()
+        created_at_utc: new Date(firstItem.meta.takenAt * 1000).toISOString()
       }
     };
     
