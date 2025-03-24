@@ -1,190 +1,183 @@
 import { NextResponse } from 'next/server';
 
 const API_KEY = process.env.INSTAGRAM_API_KEY;
-const API_ENDPOINT = 'https://instagram-looter2.p.rapidapi.com/post-dl';
+const API_HOST = process.env.INSTAGRAM_API_HOST || 'save-insta1.p.rapidapi.com';
+const API_ENDPOINT = 'https://save-insta1.p.rapidapi.com/media';
 
 // Define the resource interface
 interface Resource {
   type: string;
   url: string;
   thumbnail?: string;
+  thumb?: string;
 }
 
-interface InstagramMedia {
+// Define the response interface for the new API
+interface SaveInstaResponse {
+  error: boolean;
+  hosting: string;
+  shortcode: string;
+  caption: string;
   type: string;
-  link: string;
-  img: string;
+  download_url: string;
+  thumb: string;
+  media?: {
+    url: string;
+    type: string;
+  }[];
 }
 
-interface InstagramResponse {
-  data: {
-    full_name: string;
-    username: string;
-    medias: InstagramMedia[];
-    comment_count: number | null;
-    like_count: number;
-    taken_at_timestamp: number;
-    caption: string;
-  };
-  status: boolean;
-  attempts: number;
-}
-
-// Sanitize the Instagram URL
-const sanitizeInstagramUrl = (url: string): string => {
-  // Trim and ensure it has protocol
+// Function to sanitize Instagram URLs
+function sanitizeInstagramUrl(url: string): string {
   let sanitizedUrl = url.trim();
   
-  // Add https:// if missing
-  if (!sanitizedUrl.startsWith('http')) {
-    sanitizedUrl = `https://${sanitizedUrl}`;
+  // Ensure URL has a protocol
+  if (!sanitizedUrl.startsWith('http://') && !sanitizedUrl.startsWith('https://')) {
+    sanitizedUrl = 'https://' + sanitizedUrl;
   }
   
-  // Ensure it's an Instagram URL
-  if (!sanitizedUrl.includes('instagram.com')) {
-    if (sanitizedUrl.includes('instagr.am')) {
-      // Convert instagr.am to instagram.com
-      sanitizedUrl = sanitizedUrl.replace('instagr.am', 'instagram.com');
-    } else {
-      // Assume it's a shortcode and construct a default URL
-      sanitizedUrl = `https://www.instagram.com/p/${sanitizedUrl}`;
-    }
+  // Convert http to https
+  if (sanitizedUrl.startsWith('http://')) {
+    sanitizedUrl = 'https://' + sanitizedUrl.substring(7);
   }
   
-  // Handle reel URLs
-  if (sanitizedUrl.includes('/reel/')) {
-    // Convert /reel/ to /p/ for consistency
-    sanitizedUrl = sanitizedUrl.replace('/reel/', '/p/');
+  // Remove query parameters
+  const queryParamIndex = sanitizedUrl.indexOf('?');
+  if (queryParamIndex !== -1) {
+    sanitizedUrl = sanitizedUrl.substring(0, queryParamIndex);
   }
   
-  // Remove any trailing slashes
-  sanitizedUrl = sanitizedUrl.replace(/\/$/, '');
+  // Remove trailing slash
+  if (sanitizedUrl.endsWith('/')) {
+    sanitizedUrl = sanitizedUrl.slice(0, -1);
+  }
   
-  console.log('Sanitized URL:', sanitizedUrl);
   return sanitizedUrl;
-};
+}
 
 // POST handler for getting Instagram content
 export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    console.log('Received request body:', body);
-    
-    const { url } = body;
-    console.log('Extracted URL:', url);
+  console.log('Instagram API route handler called');
+  
+  // Check if API key is configured
+  if (!API_KEY) {
+    console.error('INSTAGRAM_API_KEY not configured');
+    return NextResponse.json(
+      { status: 'error', error: 'API configuration error' },
+      { status: 500 }
+    );
+  }
 
+  try {
+    // Get URL from request body
+    const body = await request.json();
+    const { url } = body;
+    
+    console.log('Received URL:', url);
+    
     if (!url) {
-      console.error('No URL provided in request');
+      console.error('No URL provided');
       return NextResponse.json(
-        { status: 'error', message: 'URL is required' },
+        { status: 'error', error: 'URL is required' },
         { status: 400 }
       );
     }
 
-    if (!API_KEY) {
-      console.error('Instagram API key is not configured');
-      return NextResponse.json(
-        { status: 'error', message: 'API configuration error' },
-        { status: 500 }
-      );
-    }
-
+    // Sanitize the URL (remove tracking parameters, ensure https, etc.)
     const sanitizedUrl = sanitizeInstagramUrl(url);
     console.log('Sanitized URL:', sanitizedUrl);
     
-    const apiUrl = `${API_ENDPOINT}?url=${encodeURIComponent(sanitizedUrl)}`;
-    console.log('Making request to:', apiUrl);
+    // Call the Instagram API
+    const apiUrl = API_ENDPOINT;
+    console.log('Calling API:', apiUrl);
     
     const response = await fetch(apiUrl, {
-      method: 'GET',
+      method: 'POST',
       headers: {
-        'X-RapidAPI-Key': API_KEY,
-        'X-RapidAPI-Host': 'instagram-looter2.p.rapidapi.com'
+        'x-rapidapi-key': API_KEY,
+        'x-rapidapi-host': API_HOST,
+        'Content-Type': 'application/json'
       },
-      next: { revalidate: 0 }
+      body: JSON.stringify({
+        url: sanitizedUrl
+      })
     });
-
-    console.log('API Response status:', response.status);
-    console.log('API Response headers:', Object.fromEntries(response.headers.entries()));
-
+    
+    console.log('API response status:', response.status);
+    console.log('API response headers:', Object.fromEntries(response.headers.entries()));
+    
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('Instagram API error:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: errorData
-      });
+      const errorText = await response.text();
+      console.error('API error response:', errorText);
+      try {
+        const errorData = JSON.parse(errorText);
+        return NextResponse.json(
+          { status: 'error', error: errorData.message || 'API request failed' },
+          { status: response.status }
+        );
+      } catch (e) {
+        return NextResponse.json(
+          { status: 'error', error: `API request failed with status ${response.status}` },
+          { status: response.status }
+        );
+      }
+    }
+    
+    const responseData: SaveInstaResponse = await response.json();
+    console.log('API response data:', JSON.stringify(responseData));
+    
+    if (responseData.error) {
       return NextResponse.json(
-        { 
-          status: 'error', 
-          message: `API request failed: ${response.statusText}`,
-          details: errorData
-        },
-        { status: response.status }
+        { status: 'error', error: 'Failed to fetch Instagram content' },
+        { status: 400 }
       );
     }
 
-    const data = await response.json();
-    console.log('API Response data:', JSON.stringify(data, null, 2));
+    // Transform the response to match our application's expected format
+    let resources: Resource[] = [];
     
-    // Handle error from the API
-    if (!data.status) {
-      console.error('API returned error status:', data);
-      return NextResponse.json({ 
-        status: 'error', 
-        message: 'Failed to fetch content',
-        details: data
-      }, { status: 400 });
+    // Handle single media items
+    if (responseData.download_url) {
+      resources.push({
+        type: responseData.type === 'image' ? 'image' : 'video',
+        url: responseData.download_url,
+        thumb: responseData.thumb
+      });
     }
     
-    // Process the data from the API
-    const apiData = data as InstagramResponse;
-    
-    if (!apiData.data) {
-      console.error('No data in API response:', data);
-      return NextResponse.json({ 
-        status: 'error', 
-        message: 'No data received from Instagram',
-        details: data
-      }, { status: 400 });
-    }
-    
-    // Create a standardized result structure
-    const result = {
-      status: 'success',
-      info: {
-        id: apiData.data.username || '',
-        type: apiData.data.medias?.[0]?.type || 'unknown',
-        shortcode: apiData.data.username || '',
-        caption: apiData.data.caption || '',
-        owner: {
-          username: apiData.data.username,
-          full_name: apiData.data.full_name
-        },
-        created_at_utc: new Date(apiData.data.taken_at_timestamp * 1000).toISOString(),
-        resources: [] as Resource[]
-      }
-    };
-    
-    // Handle the response based on the new API structure
-    if (apiData.data.medias && Array.isArray(apiData.data.medias)) {
-      result.info.resources = apiData.data.medias.map((item: InstagramMedia) => ({
-        type: item.type || 'image',
-        url: item.link || '',
-        thumbnail: item.img || item.link || ''
+    // Handle media arrays (for carousels, etc.)
+    if (responseData.media && responseData.media.length > 0) {
+      resources = responseData.media.map(item => ({
+        type: item.type === 'image' ? 'image' : 'video',
+        url: item.url,
+        thumb: responseData.thumb
       }));
     }
     
-    console.log('Final processed result:', JSON.stringify(result, null, 2));
+    // Build our response
+    const result = {
+      status: 'success',
+      info: {
+        id: responseData.shortcode,
+        type: responseData.type,
+        shortcode: responseData.shortcode,
+        caption: responseData.caption,
+        resources,
+        owner: {
+          username: '',
+          full_name: ''
+        },
+        created_at_utc: new Date().toISOString()
+      }
+    };
     
+    console.log('Transformed response:', JSON.stringify(result));
     return NextResponse.json(result);
+    
   } catch (error) {
-    console.error('Error in Instagram API route:', error);
+    console.error('Error processing request:', error);
     return NextResponse.json(
-      { 
-        status: 'error', 
-        message: error instanceof Error ? error.message : 'An unknown error occurred' 
-      },
+      { status: 'error', error: 'Error fetching Instagram content' },
       { status: 500 }
     );
   }

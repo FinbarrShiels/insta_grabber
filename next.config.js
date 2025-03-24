@@ -8,6 +8,10 @@ const nextConfig = {
       },
     ],
   },
+  env: {
+    INSTAGRAM_API_KEY: process.env.INSTAGRAM_API_KEY,
+    INSTAGRAM_API_HOST: process.env.INSTAGRAM_API_HOST,
+  },
 };
 
 module.exports = nextConfig; 
