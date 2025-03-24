@@ -32,6 +32,7 @@ interface ContentInfo {
   title: string;
   description: string;
   resources: Resource[];
+  type?: string;
   owner?: {
     username: string;
     full_name: string;
@@ -320,8 +321,8 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
     return <p className="text-white/80">No media preview available</p>;
   }
 
-  // Check if it's a story content type
-  if (data.type === 'story') {
+  // Check if it's a story content type - check the data type passed from the parent component
+  if ((data as any).type === 'story') {
     return (
       <StoryGrid 
         resources={data.resources}

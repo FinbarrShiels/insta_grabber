@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { 
   PlayIcon, 
-  PauseIcon, 
   ArrowDownTrayIcon 
 } from '@heroicons/react/24/outline';
 import dynamic from 'next/dynamic';
@@ -32,7 +31,7 @@ const StoryGrid: React.FC<StoryGridProps> = ({ resources, onDownload }) => {
   // Initialize refs array when resources change
   useEffect(() => {
     playerRefs.current = resources.map(() => null);
-  }, [resources.length]);
+  }, [resources]);
 
   // Handle video click
   const handleVideoClick = (index: number) => {
