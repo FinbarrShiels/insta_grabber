@@ -91,6 +91,7 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   contentType
 }) => {
   const resultsRef = useRef<HTMLDivElement>(null);
+  const [actualContentType, setActualContentType] = useState(contentType);
   
   useEffect(() => {
     if (data?.info?.resources) {
@@ -103,6 +104,20 @@ const ContentResults: React.FC<ContentResultsProps> = ({
         });
       });
       
+      // Determine the actual content type based on data
+      if (data.info.resources.length > 1) {
+        setActualContentType('carousel');
+      } else if (data.info.resources.length === 1) {
+        const resourceType = data.info.resources[0].type;
+        if (resourceType === 'video') {
+          // Try to determine if it's a reel or regular video
+          // This is a simplified approach - your actual logic might be more complex
+          setActualContentType(contentType === 'reel' ? 'reel' : 'video');
+        } else if (resourceType === 'image') {
+          setActualContentType('photo');
+        }
+      }
+      
       // Scroll to results when content is found
       setTimeout(() => {
         if (resultsRef.current) {
@@ -111,8 +126,9 @@ const ContentResults: React.FC<ContentResultsProps> = ({
       }, 500);
     } else {
       console.log('No resources found in data:', data);
+      setActualContentType(contentType);
     }
-  }, [data]);
+  }, [data, contentType]);
 
   const getContentIcon = (type: string) => {
     switch (type) {
@@ -150,8 +166,8 @@ const ContentResults: React.FC<ContentResultsProps> = ({
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-white">Download Results</h2>
         <div className="flex items-center gap-1.5 text-xs text-pink-200 bg-pink-200/20 px-3 py-1.5 rounded-full">
-          {getContentIcon(contentType)}
-          <span>{contentType.toUpperCase()}</span>
+          {getContentIcon(actualContentType)}
+          <span>{actualContentType.toUpperCase()}</span>
         </div>
       </div>
       
