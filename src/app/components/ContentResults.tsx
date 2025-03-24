@@ -225,9 +225,8 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const handleDownload = async (url: string, filename: string, index: number) => {
     try {
       setItemDownloadStatus(prev => ({ ...prev, [index]: true }));
-      const downloadUrl = `/api/download/${filename}?url=${encodeURIComponent(url)}`;
       const link = document.createElement('a');
-      link.href = downloadUrl;
+      link.href = url;
       link.download = filename;
       document.body.appendChild(link);
       link.click();
