@@ -13,11 +13,11 @@ const Header: React.FC = () => {
           <Logo />
         </Link>
         <div className="flex items-center space-x-3 sm:space-x-5">
-          <a 
-            href="#" 
-            className="text-white group flex items-center gap-1.5 text-sm sm:text-base font-medium hover:text-pink-200 transition-colors"
+          <a
+            href="/faq"
+            className="text-white group flex items-center gap-1.5 text-sm sm:text-base font-medium hover:text-white/80 transition-colors"
           >
-            <QuestionMarkCircleIcon className="h-5 w-5 group-hover:text-pink-200" />
+            <QuestionMarkCircleIcon className="h-5 w-5 text-white/80 group-hover:text-white/90 transition-colors" />
             <span>FAQ</span>
           </a>
           
