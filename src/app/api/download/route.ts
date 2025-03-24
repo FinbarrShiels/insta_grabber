@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
-import { generateTempFilename } from '../../utils/api';
 
 interface DownloadRequest {
   url: string;
@@ -80,7 +78,7 @@ export async function GET(request: NextRequest) {
     headers.set('Content-Disposition', `attachment; filename="${filename}"`);
 
     // Return the file stream
-    return new NextResponse(fileStream as any, {
+    return new NextResponse(fileStream as unknown as ReadableStream, {
       headers
     });
 

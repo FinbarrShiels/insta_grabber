@@ -19,7 +19,10 @@ import {
   PauseIcon
 } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import ReactPlayer from 'react-player';
+import dynamic from 'next/dynamic';
+
+// Dynamically import ReactPlayer to avoid SSR issues
+const DynamicReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 interface Resource {
   type: string;
@@ -76,9 +79,8 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   useEffect(() => {
     if (data?.info?.resources) {
       console.log('Resources available:', data.info.resources.length);
-      data.info.resources.forEach((resource: any, index: number) => {
+      data.info.resources.forEach((resource: Resource, index: number) => {
         console.log(`Resource ${index}:`, resource.type, resource.url);
-        // Log all potential thumbnail sources
         console.log(`Resource ${index} thumbnails:`, {
           thumbnail: resource.thumbnail || 'none',
           thumb: resource.thumb || 'none'
@@ -257,7 +259,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
-  const playerRef = useRef<ReactPlayer>(null);
+  const playerRef = useRef(null);
   
   // Create a helper function to proxy URLs
   const getProxiedImageUrl = (url: string | undefined) => {
@@ -364,9 +366,6 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   
   // If there are videos, display the video player centered
   if (videoItems.length > 0) {
-    // Dynamic import of ReactPlayer to avoid SSR issues
-    const ReactPlayer = require('react-player/lazy').default;
-    
     const videoResource = selectedVideo !== null 
       ? data.resources[selectedVideo] 
       : videoItems[0];
@@ -383,7 +382,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
             {/* Video Player */}
             {videoResource && (
               <div className="relative w-full h-full">
-                <ReactPlayer
+                <DynamicReactPlayer
                   ref={playerRef}
                   url={videoResource.url}
                   width="100%"

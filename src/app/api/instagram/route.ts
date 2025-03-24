@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
     
     // Handle the response based on the new API structure
     if (apiData.data.data.medias && Array.isArray(apiData.data.data.medias)) {
-      result.info.resources = apiData.data.data.medias.map((item: any) => ({
+      result.info.resources = apiData.data.data.medias.map((item: InstagramMedia) => ({
         type: item.type || 'image',
         url: item.link || '',
         thumbnail: item.img || item.link || ''
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
     
     if (result.info.resources && result.info.resources.length > 0) {
       console.log('Resource URLs:');
-      result.info.resources.forEach((resource: any, index: number) => {
+      result.info.resources.forEach((resource: Resource, index: number) => {
         console.log(`Resource ${index}: ${resource.type} - ${resource.url.substring(0, 100)}...`);
       });
     }
