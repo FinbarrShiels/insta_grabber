@@ -18,19 +18,16 @@ interface InstagramMedia {
 
 interface InstagramResponse {
   data: {
-    data: {
-      owner: {
-        username: string;
-        full_name: string;
-      };
-      created_at_utc: number;
-      medias: InstagramMedia[];
-      comment_count: number;
-      like_count: number;
-      caption: string;
-    };
-    status: string;
+    full_name: string;
+    username: string;
+    medias: InstagramMedia[];
+    comment_count: number | null;
+    like_count: number;
+    taken_at_timestamp: number;
+    caption: string;
   };
+  status: boolean;
+  attempts: number;
 }
 
 // Sanitize the Instagram URL
@@ -91,7 +88,7 @@ export async function POST(request: Request) {
     
     console.log('Fetching Instagram content for URL:', sanitizedUrl);
     
-    const response = await fetch(API_ENDPOINT, {
+    const response = await fetch(`${API_ENDPOINT}?url=${encodeURIComponent(sanitizedUrl)}`, {
       method: 'GET',
       headers: {
         'X-RapidAPI-Key': API_KEY,
@@ -124,7 +121,7 @@ export async function POST(request: Request) {
       console.error('API returned error status:', data);
       return NextResponse.json({ 
         status: 'error', 
-        message: data.message || 'Failed to fetch content',
+        message: 'Failed to fetch content',
         details: data
       }, { status: 400 });
     }
@@ -132,7 +129,7 @@ export async function POST(request: Request) {
     // Process the data from the API
     const apiData = data as InstagramResponse;
     
-    if (!apiData) {
+    if (!apiData.data) {
       console.error('No data in API response:', data);
       return NextResponse.json({ 
         status: 'error', 
@@ -145,22 +142,22 @@ export async function POST(request: Request) {
     const result = {
       status: 'success',
       info: {
-        id: apiData.data.data.owner.username || '',
-        type: apiData.data.data.medias?.[0]?.type || 'unknown',
-        shortcode: apiData.data.data.owner.username || '',
-        caption: apiData.data.data.caption || '',
+        id: apiData.data.username || '',
+        type: apiData.data.medias?.[0]?.type || 'unknown',
+        shortcode: apiData.data.username || '',
+        caption: apiData.data.caption || '',
         owner: {
-          username: apiData.data.data.owner.username,
-          full_name: apiData.data.data.owner.full_name
+          username: apiData.data.username,
+          full_name: apiData.data.full_name
         },
-        created_at_utc: new Date(apiData.data.data.created_at_utc * 1000).toISOString(),
+        created_at_utc: new Date(apiData.data.taken_at_timestamp * 1000).toISOString(),
         resources: [] as Resource[]
       }
     };
     
     // Handle the response based on the new API structure
-    if (apiData.data.data.medias && Array.isArray(apiData.data.data.medias)) {
-      result.info.resources = apiData.data.data.medias.map((item: InstagramMedia) => ({
+    if (apiData.data.medias && Array.isArray(apiData.data.medias)) {
+      result.info.resources = apiData.data.medias.map((item: InstagramMedia) => ({
         type: item.type || 'image',
         url: item.link || '',
         thumbnail: item.img || item.link || ''
