@@ -19,12 +19,6 @@ export interface InstagramMediaResponse {
   }[];
 }
 
-// Interface for media items in carousel
-interface MediaItem {
-  url: string;
-  type: string;
-}
-
 // Types for the API response based on the provided endpoint
 export interface InstagramApiResponse {
   status: string;

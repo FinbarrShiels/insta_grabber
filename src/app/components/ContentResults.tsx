@@ -20,33 +20,32 @@ import {
 } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
+import ReactPlayer from 'react-player';
 
 // Dynamically import ReactPlayer to avoid SSR issues
 const DynamicReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 interface Resource {
-  type: string;
+  type: 'image' | 'video';
   url: string;
-  thumbnail?: string;
   thumb?: string;
+  thumbnail?: string;
 }
 
 interface ContentInfo {
-  id: string;
-  type: string;
-  shortcode: string;
-  caption: string;
-  owner: {
+  title: string;
+  description: string;
+  resources: Resource[];
+  owner?: {
     username: string;
     full_name: string;
   };
-  created_at_utc: string;
-  resources: Resource[];
+  created_at_utc?: string;
 }
 
 interface ContentData {
-  status: string;
   info: ContentInfo;
+  error?: string;
 }
 
 interface DownloadStatus {
@@ -70,7 +69,7 @@ const ContentResults: React.FC<ContentResultsProps> = ({
   data,
   contentType
 }) => {
-  const [downloadStatus, setDownloadStatus] = useState<Record<string, DownloadStatus>>({});
+  const [downloadStatus, setDownloadStatus] = useState<Record<number, boolean>>({});
   const [error, setError] = useState<string | null>(propsError);
   
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -127,72 +126,31 @@ const ContentResults: React.FC<ContentResultsProps> = ({
     }
   };
   
-  const handleDownload = async (url: string, filename: string, resourceId: string = 'main') => {
+  const handleDownload = async (url: string, filename: string, index: number) => {
     try {
-      // Update status to loading
-      setDownloadStatus(prev => ({
-        ...prev,
-        [resourceId]: { loading: true, error: null, success: false }
-      }));
-      
-      // Call our server API to stream the download
+      setDownloadStatus(prev => ({ ...prev, [index]: true }));
       const response = await axios.post('/api/download', {
         url,
+        contentType: url.includes('.mp4') ? 'video' : 'image',
         filename
-      }, {
-        responseType: 'blob' // Important for handling the stream
       });
       
-      // Create a blob from the response data
-      const blob = new Blob([response.data], { type: response.headers['content-type'] });
-      
-      // Create a URL for the blob
-      const downloadUrl = window.URL.createObjectURL(blob);
-      
-      // Create a temporary link element
+      if (response.data.error) {
+        throw new Error(response.data.error);
+      }
+
+      const downloadUrl = `/api/download?file=${encodeURIComponent(response.data.file)}`;
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = filename;
-      
-      // Trigger the download
       document.body.appendChild(link);
       link.click();
-      
-      // Clean up
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl);
-      
-      // Update status to success
-      setDownloadStatus(prev => ({
-        ...prev,
-        [resourceId]: { loading: false, error: null, success: true }
-      }));
     } catch (err) {
       console.error('Download error:', err);
-      
-      // Update status to error
-      setDownloadStatus(prev => ({
-        ...prev,
-        [resourceId]: { 
-          loading: false, 
-          error: err instanceof Error ? err.message : 'Failed to download', 
-          success: false 
-        }
-      }));
-      
-      // Reset error status after 3 seconds
-      setTimeout(() => {
-        setDownloadStatus(prev => {
-          const current = prev[resourceId];
-          if (current && current.error) {
-            return {
-              ...prev,
-              [resourceId]: { ...current, error: null }
-            };
-          }
-          return prev;
-        });
-      }, 3000);
+      setError(err instanceof Error ? err.message : 'Failed to download content');
+    } finally {
+      setDownloadStatus(prev => ({ ...prev, [index]: false }));
     }
   };
   
@@ -230,9 +188,9 @@ const ContentResults: React.FC<ContentResultsProps> = ({
           <MediaPreview data={data.info} />
           
           {/* Caption */}
-          {data.info?.caption && (
+          {data.info?.description && (
             <div className="bg-white/10 rounded-lg p-4">
-              <p className="text-sm text-white/80">{data.info.caption}</p>
+              <p className="text-sm text-white/80">{data.info.description}</p>
             </div>
           )}
           
@@ -259,13 +217,42 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
-  const playerRef = useRef(null);
+  const [error, setError] = useState<string | null>(null);
+  const playerRef = useRef<ReactPlayer>(null);
   
   // Create a helper function to proxy URLs
   const getProxiedImageUrl = (url: string | undefined) => {
     if (!url) return '';
     // Use our proxy endpoint
     return `/api/proxy?url=${encodeURIComponent(url)}`;
+  };
+
+  // Replace img tags with Next.js Image component
+  const renderThumbnail = (url: string | undefined, alt: string) => {
+    if (!url) {
+      return (
+        <div className="flex items-center justify-center h-full">
+          <FilmIcon className="h-8 w-8 text-white/50" />
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative w-full h-full">
+        <Image
+          src={getProxiedImageUrl(url)}
+          alt={alt}
+          fill
+          className="object-cover"
+          onError={(e) => {
+            console.error("Thumbnail failed to load:", url);
+            const target = e.target as HTMLImageElement;
+            target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'%3E%3C/path%3E%3Cpath d='M10 8l6 4-6 4V8z'%3E%3C/path%3E%3C/svg%3E";
+            target.className = "w-full h-full object-contain bg-black p-4";
+          }}
+        />
+      </div>
+    );
   };
   
   // Handle video click
@@ -283,6 +270,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   // Handle video play
   const handleVideoPlay = () => {
     setIsPlaying(true);
+    setHasStartedPlaying(true);
   };
   
   // Handle video ended
@@ -298,41 +286,36 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
     }
   }, [data]);
 
-  const onDownload = async (url: string, filename: string, index: number) => {
+  const handleVideoReady = () => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(0);
+    }
+  };
+
+  const handleDownload = async (url: string, filename: string, index: number) => {
     try {
       setItemDownloadStatus(prev => ({ ...prev, [index]: true }));
-      
-      // Call our server API to stream the download
       const response = await axios.post('/api/download', {
         url,
+        contentType: url.includes('.mp4') ? 'video' : 'image',
         filename
-      }, {
-        responseType: 'blob' // Important for handling the stream
       });
       
-      // Create a blob from the response data
-      const blob = new Blob([response.data], { type: response.headers['content-type'] });
-      
-      // Create a URL for the blob
-      const downloadUrl = window.URL.createObjectURL(blob);
-      
-      // Create a temporary link element
+      if (response.data.error) {
+        throw new Error(response.data.error);
+      }
+
+      const downloadUrl = `/api/download?file=${encodeURIComponent(response.data.file)}`;
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = filename;
-      
-      // Trigger the download
       document.body.appendChild(link);
       link.click();
-      
-      // Clean up
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl);
-      
-      // Reset status after 3 seconds
-      setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
-    } catch (error) {
-      console.error('Download error:', error);
+    } catch (err) {
+      console.error('Download error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to download content');
+    } finally {
       setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
     }
   };
@@ -340,7 +323,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   useEffect(() => {
     if (data?.resources) {
       console.log('Resources available:', data.resources.length);
-      data.resources.forEach((resource: any, index: number) => {
+      data.resources.forEach((resource: Resource, index: number) => {
         console.log(`Resource ${index}:`, resource.type, resource.url);
         // Also log thumbnail URL if available
         if (resource.thumbnail) {
@@ -362,7 +345,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   }
 
   const itemCount = data.resources.length;
-  const videoItems = data.resources.filter((r: any) => r.type === 'video');
+  const videoItems = data.resources.filter((r: Resource) => r.type === 'video');
   
   // If there are videos, display the video player centered
   if (videoItems.length > 0) {
@@ -372,7 +355,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
     
     const videoIndex = selectedVideo !== null 
       ? selectedVideo 
-      : data.resources.findIndex((r: any) => r.type === 'video');
+      : data.resources.findIndex((r: Resource) => r.type === 'video');
 
     return (
       <div>
@@ -408,23 +391,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                     className="absolute inset-0 cursor-pointer"
                     onClick={handleVideoPlay}
                   >
-                    {videoResource.thumbnail || videoResource.thumb ? (
-                      <img 
-                        src={getProxiedImageUrl(videoResource.thumb || videoResource.thumbnail)}
-                        alt="Video thumbnail"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          console.error("Thumbnail failed to load:", videoResource.thumbnail || videoResource.thumb);
-                          // Fall back to a placeholder
-                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'%3E%3C/path%3E%3Cpath d='M10 8l6 4-6 4V8z'%3E%3C/path%3E%3C/svg%3E";
-                          e.currentTarget.className = "w-full h-full object-contain bg-black p-8";
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-black flex items-center justify-center">
-                        <FilmIcon className="h-16 w-16 text-white/30" />
-                      </div>
-                    )}
+                    {renderThumbnail(videoResource.thumb || videoResource.thumbnail, "Video thumbnail")}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="h-20 w-20 rounded-full bg-purple-600/70 flex items-center justify-center">
                         <PlayIcon className="h-12 w-12 text-white" />
@@ -460,9 +427,9 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                   ? 'bg-green-600' 
                   : 'bg-purple-600 hover:bg-purple-700'
               } text-white flex items-center gap-2 shadow-md`}
-              onClick={() => onDownload(
+              onClick={() => handleDownload(
                 videoResource.url, 
-                `instagram-video-${data.shortcode || 'download'}.mp4`, 
+                `instagram-video-${data.title || 'download'}.mp4`, 
                 videoIndex
               )}
               disabled={itemDownloadStatus[videoIndex]}
@@ -487,8 +454,8 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
           <div className="mt-6">
             <h3 className="text-white/90 text-sm font-medium mb-3">All Videos ({videoItems.length})</h3>
             <div className="grid grid-cols-3 gap-3">
-              {videoItems.map((resource: any, index: number) => {
-                const resourceIndex = data.resources.findIndex((r: any) => r === resource);
+              {videoItems.map((resource: Resource, index: number) => {
+                const resourceIndex = data.resources.findIndex((r: Resource) => r === resource);
                 return (
                   <div 
                     key={index} 
@@ -498,18 +465,20 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                     onClick={() => handleVideoClick(resourceIndex)}
                   >
                     {resource.thumbnail || resource.thumb ? (
-                      <img 
-                        src={getProxiedImageUrl(resource.thumb || resource.thumbnail)}
-                        alt={`Video thumbnail ${index}`}
-                        className="object-cover w-full h-full"
-                        loading="lazy"
-                        onError={(e) => {
-                          console.error("Thumbnail failed to load:", resource.thumbnail || resource.thumb);
-                          // Fall back to a placeholder
-                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'%3E%3C/path%3E%3Cpath d='M10 8l6 4-6 4V8z'%3E%3C/path%3E%3C/svg%3E";
-                          e.currentTarget.className = "w-full h-full object-contain bg-black p-4";
-                        }}
-                      />
+                      <div className="relative w-full h-full">
+                        <Image 
+                          src={getProxiedImageUrl(resource.thumb || resource.thumbnail) || ''}
+                          alt={`Video thumbnail ${index}`}
+                          fill
+                          className="object-cover"
+                          onError={(e) => {
+                            console.error("Thumbnail failed to load:", resource.thumbnail || resource.thumb);
+                            const target = e.target as HTMLImageElement;
+                            target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'%3E%3C/path%3E%3Cpath d='M10 8l6 4-6 4V8z'%3E%3C/path%3E%3C/svg%3E";
+                            target.className = "w-full h-full object-contain bg-black p-4";
+                          }}
+                        />
+                      </div>
                     ) : (
                       <div className="flex items-center justify-center h-full">
                         <FilmIcon className="h-8 w-8 text-white/50" />
@@ -528,22 +497,23 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
         )}
         
         {/* Image Resources */}
-        {data.resources.some((r: any) => r.type !== 'video') && (
+        {data.resources.some((r: Resource) => r.type !== 'video') && (
           <div className="mt-8">
             <h3 className="text-white/90 text-sm font-medium mb-3">Images</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {data.resources
-                .filter((r: any) => r.type !== 'video')
-                .map((resource: any, index: number) => {
-                  const resourceIndex = data.resources.findIndex((r: any) => r === resource);
+                .filter((r: Resource) => r.type !== 'video')
+                .map((resource: Resource, index: number) => {
+                  const resourceIndex = data.resources.findIndex((r: Resource) => r === resource);
                   return (
                     <div key={index} className="overflow-hidden border border-white/20 rounded-md shadow-md bg-black/20">
                       <div className="relative h-60 w-full">
                         {resource.url ? (
-                          <img
+                          <Image
                             src={resource.url}
                             alt={`Content preview ${index + 1}`}
-                            className="object-cover w-full h-full"
+                            fill
+                            className="object-cover"
                           />
                         ) : (
                           <p className="p-4 text-center text-white/50">Image preview not available</p>
@@ -560,9 +530,9 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                         <button 
                           className={`px-3 py-1 text-sm ${itemDownloadStatus[resourceIndex] ? 
                             'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
-                          onClick={() => onDownload(
+                          onClick={() => handleDownload(
                             resource.url, 
-                            `instagram-${data.shortcode || 'item'}-${index + 1}.jpg`,
+                            `instagram-${data.title || 'item'}-${index + 1}.jpg`,
                             resourceIndex
                           )}
                           disabled={!resource.url || itemDownloadStatus[resourceIndex]}
@@ -603,12 +573,12 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
             className="px-3 py-1 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center gap-1"
             onClick={() => {
               // Download each item with a slight delay to prevent browser limits
-              data.resources.forEach((resource: any, index: number) => {
+              data.resources.forEach((resource: Resource, index: number) => {
                 setTimeout(() => {
                   if (resource.url) {
-                    onDownload(
+                    handleDownload(
                       resource.url,
-                      `instagram-album-${data.shortcode || 'download'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                      `instagram-album-${data.title || 'download'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
                       index
                     );
                   }
@@ -623,7 +593,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
       )}
       
       <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {data.resources.map((resource: any, index: number) => (
+        {data.resources.map((resource: Resource, index: number) => (
           <div key={index} className="overflow-hidden border border-white/20 rounded-md shadow-md bg-black/20">
             <div className="p-0">
               {resource.type === 'video' ? (
@@ -632,18 +602,20 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                   onClick={() => handleVideoClick(index)}
                 >
                   {resource.thumbnail || resource.thumb ? (
-                    <img 
-                      src={getProxiedImageUrl(resource.thumb || resource.thumbnail)}
-                      alt="Video thumbnail"
-                      className="object-cover w-full h-full"
-                      loading="lazy"
-                      onError={(e) => {
-                        console.error("Thumbnail failed to load:", resource.thumbnail || resource.thumb);
-                        // Fall back to a placeholder
-                        e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'%3E%3C/path%3E%3Cpath d='M10 8l6 4-6 4V8z'%3E%3C/path%3E%3C/svg%3E";
-                        e.currentTarget.className = "w-full h-full object-contain bg-black p-4";
-                      }}
-                    />
+                    <div className="relative w-full h-full">
+                      <Image 
+                        src={getProxiedImageUrl(resource.thumb || resource.thumbnail) || ''}
+                        alt="Video thumbnail"
+                        fill
+                        className="object-cover"
+                        onError={(e) => {
+                          console.error("Thumbnail failed to load:", resource.thumbnail || resource.thumb);
+                          const target = e.target as HTMLImageElement;
+                          target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'%3E%3C/path%3E%3Cpath d='M10 8l6 4-6 4V8z'%3E%3C/path%3E%3C/svg%3E";
+                          target.className = "w-full h-full object-contain bg-black p-4";
+                        }}
+                      />
+                    </div>
                   ) : (
                     <div className="flex items-center justify-center h-full">
                       <FilmIcon className="h-12 w-12 text-white/50" />
@@ -658,10 +630,11 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
               ) : (
                 resource.url ? (
                   <div className="relative h-60 w-full">
-                    <img
+                    <Image
                       src={resource.url}
                       alt={`Content preview ${index + 1}`}
-                      className="object-cover w-full h-full"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 ) : (
@@ -680,9 +653,9 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
               <button 
                 className={`px-3 py-1 text-sm ${itemDownloadStatus[index] ? 
                   'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
-                onClick={() => onDownload(
+                onClick={() => handleDownload(
                   resource.url, 
-                  `instagram-${data.shortcode || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                  `instagram-${data.title || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
                   index
                 )}
                 disabled={!resource.url || itemDownloadStatus[index]}
