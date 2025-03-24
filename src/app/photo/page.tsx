@@ -6,7 +6,7 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
-import { fetchInstagramContent, InstagramApiResponse } from '../utils/api';
+import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
   type: 'image' | 'video';
