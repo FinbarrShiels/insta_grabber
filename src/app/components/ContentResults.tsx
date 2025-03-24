@@ -319,10 +319,16 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
                 {/* Pause/Play button overlay */}
                 {hasStartedPlaying && (
                   <div 
-                    className="absolute inset-0 cursor-pointer z-10 bg-black/10 hover:bg-black/30 transition-colors duration-300 flex items-center justify-center"
+                    className={`absolute inset-0 cursor-pointer z-10 transition-all duration-300 flex items-center justify-center ${
+                      isPlaying 
+                        ? 'opacity-0 hover:opacity-100 bg-black/10 hover:bg-black/30' 
+                        : 'opacity-100 bg-black/10'
+                    }`}
                     onClick={isPlaying ? handleVideoPause : handleVideoPlay}
                   >
-                    <div className="h-20 w-20 rounded-full bg-purple-600/70 hover:bg-purple-600/90 transition-colors flex items-center justify-center">
+                    <div className={`h-20 w-20 rounded-full bg-purple-600/70 hover:bg-purple-600/90 transition-all duration-300 flex items-center justify-center ${
+                      isPlaying ? 'scale-90 hover:scale-100' : 'scale-100'
+                    }`}>
                       {isPlaying ? (
                         <PauseIcon className="h-12 w-12 text-white" />
                       ) : (
