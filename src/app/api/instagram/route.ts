@@ -12,19 +12,32 @@ interface Resource {
   thumb?: string;
 }
 
-// Define the response interface for the new API
+// Define the new API response interface based on the actual response format
 interface SaveInstaResponse {
-  error: boolean;
-  hosting: string;
-  shortcode: string;
-  caption: string;
-  type: string;
-  download_url: string;
-  thumb: string;
-  media?: {
-    url: string;
-    type: string;
+  result: {
+    urls: {
+      url: string;
+      name: string;
+      extension: string;
+    }[];
+    meta: {
+      title: string;
+      sourceUrl: string;
+      shortcode: string;
+      commentCount: number;
+      likeCount: number;
+      takenAt: number;
+      comments: {
+        text: string;
+        username: string;
+      }[];
+    };
+    pictureUrl: string;
+    pictureUrlWrapped: string;
+    service: string;
   }[];
+  success: boolean;
+  message: string;
 }
 
 // Function to sanitize Instagram URLs
@@ -126,48 +139,60 @@ export async function POST(request: Request) {
     const responseData: SaveInstaResponse = await response.json();
     console.log('API response data:', JSON.stringify(responseData));
     
-    if (responseData.error) {
+    if (!responseData.success) {
       return NextResponse.json(
-        { status: 'error', error: 'Failed to fetch Instagram content' },
+        { status: 'error', error: responseData.message || 'Failed to fetch Instagram content' },
+        { status: 400 }
+      );
+    }
+    
+    if (!responseData.result || responseData.result.length === 0) {
+      return NextResponse.json(
+        { status: 'error', error: 'No media found in the response' },
         { status: 400 }
       );
     }
 
     // Transform the response to match our application's expected format
     let resources: Resource[] = [];
+    const mediaItem = responseData.result[0];
     
-    // Handle single media items
-    if (responseData.download_url) {
+    // Determine content type based on the URLs
+    const isVideo = mediaItem.urls && mediaItem.urls[0] && mediaItem.urls[0].extension === 'mp4';
+    
+    // Handle video URLs
+    if (isVideo && mediaItem.urls.length > 0) {
+      for (const urlItem of mediaItem.urls) {
+        resources.push({
+          type: 'video',
+          url: urlItem.url,
+          thumbnail: mediaItem.pictureUrl
+        });
+      }
+    } 
+    // Handle image URLs (if no video URLs found)
+    else if (mediaItem.pictureUrl) {
       resources.push({
-        type: responseData.type === 'image' ? 'image' : 'video',
-        url: responseData.download_url,
-        thumb: responseData.thumb
+        type: 'image',
+        url: mediaItem.pictureUrl,
+        thumbnail: mediaItem.pictureUrl
       });
-    }
-    
-    // Handle media arrays (for carousels, etc.)
-    if (responseData.media && responseData.media.length > 0) {
-      resources = responseData.media.map(item => ({
-        type: item.type === 'image' ? 'image' : 'video',
-        url: item.url,
-        thumb: responseData.thumb
-      }));
     }
     
     // Build our response
     const result = {
       status: 'success',
       info: {
-        id: responseData.shortcode,
-        type: responseData.type,
-        shortcode: responseData.shortcode,
-        caption: responseData.caption,
+        id: mediaItem.meta.shortcode,
+        type: isVideo ? 'video' : 'image',
+        shortcode: mediaItem.meta.shortcode,
+        caption: mediaItem.meta.title || '',
         resources,
         owner: {
           username: '',
           full_name: ''
         },
-        created_at_utc: new Date().toISOString()
+        created_at_utc: new Date(mediaItem.meta.takenAt * 1000).toISOString()
       }
     };
     
