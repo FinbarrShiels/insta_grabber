@@ -6,14 +6,37 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
-import { fetchInstagramContent, InstagramApiResponse } from '../utils/api';
+import { fetchInstagramContent } from '../utils/api';
+
+interface Resource {
+  type: 'image' | 'video';
+  url: string;
+  thumb?: string;
+  thumbnail?: string;
+}
+
+interface ContentInfo {
+  title: string;
+  description: string;
+  resources: Resource[];
+  owner?: {
+    username: string;
+    full_name: string;
+  };
+  created_at_utc?: string;
+}
+
+interface ContentData {
+  info: ContentInfo;
+  error?: string;
+}
 
 export default function VideoDownloaderPage() {
   const [activeTab, setActiveTab] = useState('video');
   const [submittedUrl, setSubmittedUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<InstagramApiResponse | null>(null);
+  const [data, setData] = useState<ContentData | null>(null);
 
   const handleUrlSubmit = async (url: string) => {
     setSubmittedUrl(url);
@@ -23,12 +46,33 @@ export default function VideoDownloaderPage() {
     
     try {
       const response = await fetchInstagramContent(url);
-      setData(response);
-      if (response.status !== 'success') {
-        setError(response.message || 'Failed to fetch content.');
+      if (response.status === 'error') {
+        setError(response.message || 'Failed to fetch content');
+        return;
       }
+
+      // Transform the API response to match ContentData type
+      const transformedData: ContentData = {
+        info: {
+          title: response.info?.shortcode || 'Instagram Content',
+          description: response.info?.caption || '',
+          resources: (response.info?.resources || []).map(resource => ({
+            type: resource.type === 'video' ? 'video' : 'image',
+            url: resource.url,
+            thumb: resource.thumb,
+            thumbnail: resource.thumbnail
+          })),
+          owner: response.info?.owner ? {
+            username: response.info.owner.username,
+            full_name: response.info.owner.full_name
+          } : undefined,
+          created_at_utc: response.info?.created_at_utc
+        }
+      };
+
+      setData(transformedData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(err instanceof Error ? err.message : 'Failed to fetch content');
     } finally {
       setLoading(false);
     }

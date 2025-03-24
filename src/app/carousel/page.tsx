@@ -8,40 +8,44 @@ import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
 import { fetchInstagramContent } from '../utils/api';
 
-interface ContentData {
-  info: {
-    title: string;
-    description: string;
-    resources: Array<{
-      type: 'image' | 'video';
-      url: string;
-      thumb?: string;
-      thumbnail?: string;
-    }>;
-    owner?: {
-      username: string;
-      full_name: string;
-    };
-    created_at_utc?: string;
+interface Resource {
+  type: 'image' | 'video';
+  url: string;
+  thumb?: string;
+  thumbnail?: string;
+}
+
+interface ContentInfo {
+  title: string;
+  description: string;
+  resources: Resource[];
+  owner?: {
+    username: string;
+    full_name: string;
   };
+  created_at_utc?: string;
+}
+
+interface ContentData {
+  info: ContentInfo;
   error?: string;
 }
 
-export default function CarouselPage() {
+export default function CarouselDownloaderPage() {
   const [activeTab, setActiveTab] = useState('carousel');
-  const [url, setUrl] = useState('');
+  const [submittedUrl, setSubmittedUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ContentData | null>(null);
 
-  const handleUrlSubmit = async (submittedUrl: string) => {
-    setUrl(submittedUrl);
+  const handleUrlSubmit = async (url: string) => {
+    setSubmittedUrl(url);
     setLoading(true);
     setError(null);
     setData(null);
-
+    
     try {
-      const response = await fetchInstagramContent(submittedUrl);
+      const response = await fetchInstagramContent(url);
       if (response.status === 'error') {
         setError(response.message || 'Failed to fetch content');
         return;
@@ -101,7 +105,7 @@ export default function CarouselPage() {
         
         {/* Results Section */}
         <ContentResults 
-          submittedUrl={url}
+          submittedUrl={submittedUrl}
           loading={loading}
           error={error}
           data={data}
