@@ -19,27 +19,56 @@ import {
   PauseIcon
 } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import ReactPlayer from 'react-player';
+
+interface Resource {
+  type: string;
+  url: string;
+  thumbnail?: string;
+  thumb?: string;
+}
+
+interface ContentInfo {
+  id: string;
+  type: string;
+  shortcode: string;
+  caption: string;
+  owner: {
+    username: string;
+    full_name: string;
+  };
+  created_at_utc: string;
+  resources: Resource[];
+}
+
+interface ContentData {
+  status: string;
+  info: ContentInfo;
+}
+
+interface DownloadStatus {
+  loading: boolean;
+  error: string | null;
+  success: boolean;
+}
 
 interface ContentResultsProps {
   submittedUrl: string;
   loading: boolean;
   error: string | null;
-  data: InstagramApiResponse | null;
+  data: ContentData | null;
   contentType: string;
 }
 
 const ContentResults: React.FC<ContentResultsProps> = ({
   submittedUrl,
   loading,
-  error,
+  error: propsError,
   data,
   contentType
 }) => {
-  const [downloadStatus, setDownloadStatus] = useState<Record<string, {
-    loading: boolean;
-    error: string | null;
-    success: boolean;
-  }>>({});
+  const [downloadStatus, setDownloadStatus] = useState<Record<string, DownloadStatus>>({});
+  const [error, setError] = useState<string | null>(propsError);
   
   const resultsRef = useRef<HTMLDivElement>(null);
   
@@ -196,7 +225,7 @@ const ContentResults: React.FC<ContentResultsProps> = ({
       ) : data?.info ? (
         <div className="space-y-4" ref={resultsRef}>
           {/* Media Preview */}
-          <MediaPreview data={data} />
+          <MediaPreview data={data.info} />
           
           {/* Caption */}
           {data.info?.caption && (
@@ -223,15 +252,15 @@ const ContentResults: React.FC<ContentResultsProps> = ({
 };
 
 // Display the media previews
-const MediaPreview = ({ data }: { data: any }) => {
+const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const [itemDownloadStatus, setItemDownloadStatus] = useState<Record<number, boolean>>({});
   const [selectedVideo, setSelectedVideo] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<ReactPlayer>(null);
   
   // Create a helper function to proxy URLs
-  const getProxiedImageUrl = (url: string) => {
+  const getProxiedImageUrl = (url: string | undefined) => {
     if (!url) return '';
     // Use our proxy endpoint
     return `/api/proxy?url=${encodeURIComponent(url)}`;
@@ -307,9 +336,9 @@ const MediaPreview = ({ data }: { data: any }) => {
   };
 
   useEffect(() => {
-    if (data?.info?.resources) {
-      console.log('Resources available:', data.info.resources.length);
-      data.info.resources.forEach((resource: any, index: number) => {
+    if (data?.resources) {
+      console.log('Resources available:', data.resources.length);
+      data.resources.forEach((resource: any, index: number) => {
         console.log(`Resource ${index}:`, resource.type, resource.url);
         // Also log thumbnail URL if available
         if (resource.thumbnail) {
@@ -326,12 +355,12 @@ const MediaPreview = ({ data }: { data: any }) => {
     import('react-player/lazy');
   }, []);
 
-  if (!data?.info?.resources || data.info.resources.length === 0) {
+  if (!data?.resources || data.resources.length === 0) {
     return <p className="text-white/80">No media preview available</p>;
   }
 
-  const itemCount = data.info.resources.length;
-  const videoItems = data.info.resources.filter((r: any) => r.type === 'video');
+  const itemCount = data.resources.length;
+  const videoItems = data.resources.filter((r: any) => r.type === 'video');
   
   // If there are videos, display the video player centered
   if (videoItems.length > 0) {
@@ -339,12 +368,12 @@ const MediaPreview = ({ data }: { data: any }) => {
     const ReactPlayer = require('react-player/lazy').default;
     
     const videoResource = selectedVideo !== null 
-      ? data.info.resources[selectedVideo] 
+      ? data.resources[selectedVideo] 
       : videoItems[0];
     
     const videoIndex = selectedVideo !== null 
       ? selectedVideo 
-      : data.info.resources.findIndex((r: any) => r.type === 'video');
+      : data.resources.findIndex((r: any) => r.type === 'video');
 
     return (
       <div>
@@ -434,7 +463,7 @@ const MediaPreview = ({ data }: { data: any }) => {
               } text-white flex items-center gap-2 shadow-md`}
               onClick={() => onDownload(
                 videoResource.url, 
-                `instagram-video-${data.info.shortcode || 'download'}.mp4`, 
+                `instagram-video-${data.shortcode || 'download'}.mp4`, 
                 videoIndex
               )}
               disabled={itemDownloadStatus[videoIndex]}
@@ -460,7 +489,7 @@ const MediaPreview = ({ data }: { data: any }) => {
             <h3 className="text-white/90 text-sm font-medium mb-3">All Videos ({videoItems.length})</h3>
             <div className="grid grid-cols-3 gap-3">
               {videoItems.map((resource: any, index: number) => {
-                const resourceIndex = data.info.resources.findIndex((r: any) => r === resource);
+                const resourceIndex = data.resources.findIndex((r: any) => r === resource);
                 return (
                   <div 
                     key={index} 
@@ -500,14 +529,14 @@ const MediaPreview = ({ data }: { data: any }) => {
         )}
         
         {/* Image Resources */}
-        {data.info.resources.some((r: any) => r.type !== 'video') && (
+        {data.resources.some((r: any) => r.type !== 'video') && (
           <div className="mt-8">
             <h3 className="text-white/90 text-sm font-medium mb-3">Images</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {data.info.resources
+              {data.resources
                 .filter((r: any) => r.type !== 'video')
                 .map((resource: any, index: number) => {
-                  const resourceIndex = data.info.resources.findIndex((r: any) => r === resource);
+                  const resourceIndex = data.resources.findIndex((r: any) => r === resource);
                   return (
                     <div key={index} className="overflow-hidden border border-white/20 rounded-md shadow-md bg-black/20">
                       <div className="relative h-60 w-full">
@@ -534,7 +563,7 @@ const MediaPreview = ({ data }: { data: any }) => {
                             'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
                           onClick={() => onDownload(
                             resource.url, 
-                            `instagram-${data.info.shortcode || 'item'}-${index + 1}.jpg`,
+                            `instagram-${data.shortcode || 'item'}-${index + 1}.jpg`,
                             resourceIndex
                           )}
                           disabled={!resource.url || itemDownloadStatus[resourceIndex]}
@@ -575,12 +604,12 @@ const MediaPreview = ({ data }: { data: any }) => {
             className="px-3 py-1 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center gap-1"
             onClick={() => {
               // Download each item with a slight delay to prevent browser limits
-              data.info.resources.forEach((resource: any, index: number) => {
+              data.resources.forEach((resource: any, index: number) => {
                 setTimeout(() => {
                   if (resource.url) {
                     onDownload(
                       resource.url,
-                      `instagram-album-${data.info.shortcode || 'download'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                      `instagram-album-${data.shortcode || 'download'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
                       index
                     );
                   }
@@ -595,7 +624,7 @@ const MediaPreview = ({ data }: { data: any }) => {
       )}
       
       <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {data.info.resources.map((resource: any, index: number) => (
+        {data.resources.map((resource: any, index: number) => (
           <div key={index} className="overflow-hidden border border-white/20 rounded-md shadow-md bg-black/20">
             <div className="p-0">
               {resource.type === 'video' ? (
@@ -654,7 +683,7 @@ const MediaPreview = ({ data }: { data: any }) => {
                   'bg-green-600' : 'bg-purple-600'} text-white rounded-md hover:bg-purple-700 flex items-center gap-1`}
                 onClick={() => onDownload(
                   resource.url, 
-                  `instagram-${data.info.shortcode || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
+                  `instagram-${data.shortcode || 'item'}-${index + 1}.${resource.type === 'video' ? 'mp4' : 'jpg'}`,
                   index
                 )}
                 disabled={!resource.url || itemDownloadStatus[index]}

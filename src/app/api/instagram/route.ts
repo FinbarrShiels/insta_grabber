@@ -12,6 +12,29 @@ interface Resource {
   thumbnail?: string;
 }
 
+interface InstagramMedia {
+  type: string;
+  link: string;
+  img: string;
+}
+
+interface InstagramResponse {
+  data: {
+    data: {
+      owner: {
+        username: string;
+        full_name: string;
+      };
+      created_at_utc: number;
+      medias: InstagramMedia[];
+      comment_count: number;
+      like_count: number;
+      caption: string;
+    };
+    status: string;
+  };
+}
+
 // Sanitize the Instagram URL
 const sanitizeInstagramUrl = (url: string): string => {
   // Trim and ensure it has protocol
@@ -87,7 +110,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Process the data from the API
-    const apiData = response.data.data;
+    const apiData = response.data as InstagramResponse;
     
     if (!apiData) {
       console.error('No data in API response:', response.data);
@@ -102,22 +125,22 @@ export async function POST(request: NextRequest) {
     const result = {
       status: 'success',
       info: {
-        id: apiData.username || '',
-        type: apiData.medias?.[0]?.type || 'unknown',
-        shortcode: apiData.username || '',
-        caption: apiData.caption || '',
+        id: apiData.data.data.owner.username || '',
+        type: apiData.data.data.medias?.[0]?.type || 'unknown',
+        shortcode: apiData.data.data.owner.username || '',
+        caption: apiData.data.data.caption || '',
         owner: {
-          username: apiData.username,
-          full_name: apiData.full_name
+          username: apiData.data.data.owner.username,
+          full_name: apiData.data.data.owner.full_name
         },
-        created_at_utc: new Date(apiData.taken_at_timestamp * 1000).toISOString(),
+        created_at_utc: new Date(apiData.data.data.created_at_utc * 1000).toISOString(),
         resources: [] as Resource[]
       }
     };
     
     // Handle the response based on the new API structure
-    if (apiData.medias && Array.isArray(apiData.medias)) {
-      result.info.resources = apiData.medias.map((item: any) => ({
+    if (apiData.data.data.medias && Array.isArray(apiData.data.data.medias)) {
+      result.info.resources = apiData.data.data.medias.map((item: any) => ({
         type: item.type || 'image',
         url: item.link || '',
         thumbnail: item.img || item.link || ''

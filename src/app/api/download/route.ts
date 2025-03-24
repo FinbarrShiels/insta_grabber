@@ -4,10 +4,15 @@ import fs from 'fs';
 import path from 'path';
 import { generateTempFilename } from '../../utils/api';
 
+interface DownloadRequest {
+  url: string;
+  filename: string;
+}
+
 // POST handler for downloading content
 export async function POST(request: Request) {
   try {
-    const { url, filename } = await request.json();
+    const { url, filename } = await request.json() as DownloadRequest;
     
     if (!url || !filename) {
       return NextResponse.json(
