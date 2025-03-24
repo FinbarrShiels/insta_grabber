@@ -154,7 +154,7 @@ export async function POST(request: Request) {
     }
 
     // Transform the response to match our application's expected format
-    let resources: Resource[] = [];
+    const resources: Resource[] = [];
     const mediaItem = responseData.result[0];
     
     // Determine content type based on the URLs
