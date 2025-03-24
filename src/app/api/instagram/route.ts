@@ -114,8 +114,8 @@ export async function POST(request: Request) {
           { status: 'error', error: errorData.message || 'API request failed' },
           { status: response.status }
         );
-      } catch (_) {
-        // Using underscore to indicate intentionally unused parameter
+      } catch {
+        // No parameter needed since we're not using the error
         return NextResponse.json(
           { status: 'error', error: `API request failed with status ${response.status}` },
           { status: response.status }
