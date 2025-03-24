@@ -225,14 +225,32 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const handleDownload = async (url: string, filename: string, index: number) => {
     try {
       setItemDownloadStatus(prev => ({ ...prev, [index]: true }));
+      
+      // Fetch the video file
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch video');
+      
+      // Convert the response to a blob
+      const blob = await response.blob();
+      
+      // Create a blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link element
       const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
+      link.href = blobUrl;
+      link.download = filename || 'code.mp4'; // Use code.mp4 as default filename
+      
+      // Append to body, click, and cleanup
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // Clean up the blob URL
+      window.URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error('Download error:', err);
+      alert('Failed to download video. Please try again.');
     } finally {
       setItemDownloadStatus(prev => ({ ...prev, [index]: false }));
     }
