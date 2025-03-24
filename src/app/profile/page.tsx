@@ -6,6 +6,7 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import Footer from '../components/Footer';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import DownloadGuide from '../components/DownloadGuide';
 
 export default function ProfileDownloaderPage() {
   const [activeTab, setActiveTab] = useState('profile');

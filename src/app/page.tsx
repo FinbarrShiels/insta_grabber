@@ -6,6 +6,7 @@ import TabNavigation from './components/TabNavigation';
 import UrlInputForm from './components/UrlInputForm';
 import ContentResults from './components/ContentResults';
 import Footer from './components/Footer';
+import DownloadGuide from './components/DownloadGuide';
 import { fetchInstagramContent } from './utils/api';
 
 interface ContentData {
@@ -107,6 +108,9 @@ export default function Home() {
           data={data}
           contentType={activeTab}
         />
+        
+        {/* Download Guide Section */}
+        <DownloadGuide />
       </div>
       
       <Footer />
