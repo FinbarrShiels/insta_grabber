@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { ClipboardIcon, ArrowRightIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 
 const DownloadGuide: React.FC = () => {
   return (
@@ -58,7 +57,7 @@ const DownloadGuide: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Paste the link</h3>
             <p className="text-white/80 text-center text-sm">
-              Return to the InstaGrab website, paste the link into the input field and click the "Download" button.
+              Return to the InstaGrab website, paste the link into the input field and click the &quot;Download&quot; button.
             </p>
           </div>
         </div>

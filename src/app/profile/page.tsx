@@ -69,6 +69,11 @@ export default function ProfileDownloaderPage() {
               </div>
             </div>
           )}
+          
+          {/* Download Guide Section */}
+          <div className="max-w-4xl mx-auto w-full px-2 mt-12">
+            <DownloadGuide />
+          </div>
         </main>
         
         <Footer />
