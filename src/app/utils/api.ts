@@ -1,7 +1,4 @@
-import axios from 'axios';
-
-// API configuration - these are moved to the server-side API route
-// We no longer expose the API keys in the client code
+// API endpoint for Instagram content
 const API_ENDPOINT = '/api/instagram';
 
 // Types for the new API response format
@@ -73,29 +70,32 @@ export const sanitizeInstagramUrl = (url: string): string => {
   return sanitizedUrl;
 };
 
-// Fetch Instagram content with the new API response format
+// Function to fetch Instagram content
 export const fetchInstagramContent = async (url: string): Promise<InstagramApiResponse> => {
   try {
-    // Use our server-side API instead of directly calling RapidAPI
-    const response = await axios.post(API_ENDPOINT, {
-      url: sanitizeInstagramUrl(url)
+    const response = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url }),
     });
-    
-    // Our server API already formats the data properly
-    return response.data;
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to fetch content');
+    }
+
+    return await response.json();
   } catch (error) {
     console.error('Error fetching Instagram content:', error);
-    if (axios.isAxiosError(error)) {
-      return {
-        status: 'error',
-        message: error.response?.data?.message || error.message || 'Failed to fetch content',
-      };
-    }
-    return {
-      status: 'error',
-      message: 'An unknown error occurred',
-    };
+    throw error;
   }
+};
+
+// Function to get proxied image URL
+export const getProxiedImageUrl = (url: string): string => {
+  return `/api/proxy?url=${encodeURIComponent(url)}`;
 };
 
 // Content type detection
@@ -159,7 +159,8 @@ export const api = {
   fetchInstagramContent,
   getContentType,
   sanitizeInstagramUrl,
-  generateTempFilename
+  generateTempFilename,
+  getProxiedImageUrl
 };
 
 export default api; 

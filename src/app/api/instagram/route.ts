@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
 
-// Environment variables for API access
-const RAPID_API_KEY = process.env.RAPID_API_KEY || 'ad481be39bmshfbb217c42d90632p144f43jsn4094a159a171';
-const RAPID_API_HOST = 'instagram-looter2.p.rapidapi.com';
+const API_KEY = process.env.INSTAGRAM_API_KEY;
+const API_ENDPOINT = 'https://instagram-looter2.p.rapidapi.com/post-dl';
 
 // Define the resource interface
 interface Resource {
@@ -70,54 +68,76 @@ const sanitizeInstagramUrl = (url: string): string => {
 };
 
 // POST handler for getting Instagram content
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    // Parse request body
-    const body = await request.json();
-    const { url } = body;
-    
+    const { url } = await request.json();
+
     if (!url) {
-      return NextResponse.json({ 
-        status: 'error', 
-        message: 'URL is required' 
-      }, { status: 400 });
+      return NextResponse.json(
+        { status: 'error', message: 'URL is required' },
+        { status: 400 }
+      );
     }
-    
+
+    if (!API_KEY) {
+      console.error('Instagram API key is not configured');
+      return NextResponse.json(
+        { status: 'error', message: 'API configuration error' },
+        { status: 500 }
+      );
+    }
+
     const sanitizedUrl = sanitizeInstagramUrl(url);
     
     console.log('Fetching Instagram content for URL:', sanitizedUrl);
     
-    // Make request to Rapid API with the new endpoint
-    const response = await axios.get('https://instagram-looter2.p.rapidapi.com/post-dl', {
-      params: { url: sanitizedUrl },
+    const response = await fetch(API_ENDPOINT, {
+      method: 'GET',
       headers: {
-        'x-rapidapi-key': RAPID_API_KEY,
-        'x-rapidapi-host': RAPID_API_HOST
-      }
+        'X-RapidAPI-Key': API_KEY,
+        'X-RapidAPI-Host': 'instagram-looter2.p.rapidapi.com'
+      },
+      next: { revalidate: 0 }
     });
-    
-    // Log the full response for debugging
-    console.log('Full API Response:', JSON.stringify(response.data, null, 2));
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Instagram API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: errorData
+      });
+      return NextResponse.json(
+        { 
+          status: 'error', 
+          message: `API request failed: ${response.statusText}`,
+          details: errorData
+        },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
     
     // Handle error from the API
-    if (!response.data.status) {
-      console.error('API returned error status:', response.data);
+    if (!data.status) {
+      console.error('API returned error status:', data);
       return NextResponse.json({ 
         status: 'error', 
-        message: response.data.message || 'Failed to fetch content',
-        details: response.data
+        message: data.message || 'Failed to fetch content',
+        details: data
       }, { status: 400 });
     }
     
     // Process the data from the API
-    const apiData = response.data as InstagramResponse;
+    const apiData = data as InstagramResponse;
     
     if (!apiData) {
-      console.error('No data in API response:', response.data);
+      console.error('No data in API response:', data);
       return NextResponse.json({ 
         status: 'error', 
         message: 'No data received from Instagram',
-        details: response.data
+        details: data
       }, { status: 400 });
     }
     
@@ -164,28 +184,13 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(result);
   } catch (error) {
-    console.error('Instagram fetch error:', error);
-    
-    let errorMessage = 'An unknown error occurred';
-    let statusCode = 500;
-    let errorDetails = null;
-    
-    if (axios.isAxiosError(error)) {
-      console.error('Axios error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        headers: error.response?.headers
-      });
-      errorMessage = error.response?.data?.message || error.message;
-      statusCode = error.response?.status || 500;
-      errorDetails = error.response?.data;
-    }
-    
-    return NextResponse.json({ 
-      status: 'error',
-      message: errorMessage,
-      details: errorDetails
-    }, { status: statusCode });
+    console.error('Error in Instagram API route:', error);
+    return NextResponse.json(
+      { 
+        status: 'error', 
+        message: error instanceof Error ? error.message : 'An unknown error occurred' 
+      },
+      { status: 500 }
+    );
   }
 } 
