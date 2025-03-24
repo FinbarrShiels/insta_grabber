@@ -14,30 +14,57 @@ interface Resource {
 
 // Define the new API response interface based on the actual response format
 interface SaveInstaResponse {
-  result: {
-    urls: {
-      url: string;
-      name: string;
-      extension: string;
-    }[];
-    meta: {
-      title: string;
-      sourceUrl: string;
-      shortcode: string;
-      commentCount: number;
-      likeCount: number;
-      takenAt: number;
-      comments: {
-        text: string;
-        username: string;
-      }[];
-    };
-    pictureUrl: string;
-    pictureUrlWrapped: string;
-    service: string;
-  }[];
+  result: (StoryItem | RegularItem)[];
   success: boolean;
   message: string;
+}
+
+// Regular post item format
+interface RegularItem {
+  urls: {
+    url: string;
+    name: string;
+    extension: string;
+  }[];
+  meta: {
+    title: string;
+    sourceUrl: string;
+    shortcode: string;
+    commentCount: number;
+    likeCount: number;
+    takenAt: number;
+    comments: {
+      text: string;
+      username: string;
+    }[];
+  };
+  pictureUrl: string;
+  pictureUrlWrapped: string;
+  service: string;
+}
+
+// Story item format
+interface StoryItem {
+  image_versions2: {
+    candidates: {
+      width: number;
+      height: number;
+      url: string;
+      url_wrapped?: string;
+    }[];
+  };
+  original_height: number;
+  original_width: number;
+  pk: string;
+  taken_at: number;
+  video_versions: {
+    height: number;
+    type: number;
+    url: string;
+    width: number;
+    url_wrapped?: string;
+  }[];
+  has_audio: boolean;
 }
 
 // Function to sanitize Instagram URLs
@@ -54,14 +81,19 @@ function sanitizeInstagramUrl(url: string): string {
     sanitizedUrl = 'https://' + sanitizedUrl.substring(7);
   }
   
-  // Remove query parameters
-  const queryParamIndex = sanitizedUrl.indexOf('?');
-  if (queryParamIndex !== -1) {
-    sanitizedUrl = sanitizedUrl.substring(0, queryParamIndex);
+  // Check if it's a story URL
+  const isStoryUrl = sanitizedUrl.includes('/stories/');
+  
+  // For non-story URLs, remove query parameters
+  if (!isStoryUrl) {
+    const queryParamIndex = sanitizedUrl.indexOf('?');
+    if (queryParamIndex !== -1) {
+      sanitizedUrl = sanitizedUrl.substring(0, queryParamIndex);
+    }
   }
   
-  // Remove trailing slash
-  if (sanitizedUrl.endsWith('/')) {
+  // Remove trailing slash if not a story URL
+  if (!isStoryUrl && sanitizedUrl.endsWith('/')) {
     sanitizedUrl = sanitizedUrl.slice(0, -1);
   }
   
@@ -155,53 +187,96 @@ export async function POST(request: Request) {
 
     // Transform the response to match our application's expected format
     const resources: Resource[] = [];
+    const isStory = sanitizedUrl.includes('/stories/');
     
-    // Handle case when there might be multiple items (carousel post)
+    // Helper function to check if an item is a StoryItem
+    function isStoryItem(item: StoryItem | RegularItem): item is StoryItem {
+      return 'video_versions' in item;
+    }
+
+    // Helper function to check if an item is a RegularItem
+    function isRegularItem(item: StoryItem | RegularItem): item is RegularItem {
+      return 'urls' in item;
+    }
+
+    // Handle case when it's a story (has video_versions) or normal post
     for (const mediaItem of responseData.result) {
-      // Determine content type based on the URLs
-      const isVideo = mediaItem.urls && mediaItem.urls[0] && mediaItem.urls[0].extension === 'mp4';
-      
-      // Handle video URLs
-      if (isVideo && mediaItem.urls.length > 0) {
-        for (const urlItem of mediaItem.urls) {
+      // Check if it's a story format with video_versions
+      if (isStory && isStoryItem(mediaItem) && mediaItem.video_versions && mediaItem.video_versions.length > 0) {
+        // For story videos
+        resources.push({
+          type: 'video',
+          url: mediaItem.video_versions[0].url,
+          thumbnail: mediaItem.image_versions2?.candidates?.[0]?.url || ''
+        });
+      } 
+      // Handle regular post format
+      else if (isRegularItem(mediaItem)) {
+        // Determine content type based on the URLs
+        const isVideo = mediaItem.urls && mediaItem.urls[0] && mediaItem.urls[0].extension === 'mp4';
+        
+        // Handle video URLs
+        if (isVideo && mediaItem.urls && mediaItem.urls.length > 0) {
+          for (const urlItem of mediaItem.urls) {
+            resources.push({
+              type: 'video',
+              url: urlItem.url,
+              thumbnail: mediaItem.pictureUrl
+            });
+          }
+        } 
+        // Handle image URLs
+        else if (mediaItem.pictureUrl) {
           resources.push({
-            type: 'video',
-            url: urlItem.url,
+            type: 'image',
+            url: mediaItem.pictureUrl,
             thumbnail: mediaItem.pictureUrl
           });
         }
-      } 
-      // Handle image URLs
-      else if (mediaItem.pictureUrl) {
-        resources.push({
-          type: 'image',
-          url: mediaItem.pictureUrl,
-          thumbnail: mediaItem.pictureUrl
-        });
       }
     }
     
-    // Get the first item for metadata (title, shortcode, etc.)
+    // Get the first item for metadata
     const firstItem = responseData.result[0];
     
-    // Determine if it's a carousel based on number of resources
-    const contentType = resources.length > 1 ? 'carousel' : 
-                        (resources[0]?.type === 'video' ? 'video' : 'image');
+    // Determine content type - story, carousel, video, or image
+    let contentType = 'image';
+    if (isStory) {
+      contentType = 'story';
+    } else if (resources.length > 1) {
+      contentType = 'carousel';
+    } else if (resources[0]?.type === 'video') {
+      contentType = 'video';
+    }
+    
+    // Create a standardized shortcode/id from the URL if not available in response
+    let shortcode = '';
+    let caption = '';
+
+    if (isStory) {
+      // For stories, extract username from URL
+      shortcode = sanitizedUrl.split('/stories/')[1]?.replace(/\//g, '') || '';
+      caption = '';
+    } else if (isRegularItem(firstItem)) {
+      // For regular posts, use meta.shortcode if available
+      shortcode = firstItem.meta?.shortcode || sanitizedUrl.split('/p/')[1]?.replace(/\//g, '') || '';
+      caption = firstItem.meta?.title || '';
+    }
     
     // Build our response
     const result = {
       status: 'success',
       info: {
-        id: firstItem.meta.shortcode,
+        id: shortcode,
         type: contentType,
-        shortcode: firstItem.meta.shortcode,
-        caption: firstItem.meta.title || '',
+        shortcode: shortcode,
+        caption: caption,
         resources,
         owner: {
           username: '',
           full_name: ''
         },
-        created_at_utc: new Date(firstItem.meta.takenAt * 1000).toISOString()
+        created_at_utc: new Date().toISOString()
       }
     };
     
