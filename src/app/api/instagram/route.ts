@@ -67,9 +67,14 @@ const sanitizeInstagramUrl = (url: string): string => {
 // POST handler for getting Instagram content
 export async function POST(request: Request) {
   try {
-    const { url } = await request.json();
+    const body = await request.json();
+    console.log('Received request body:', body);
+    
+    const { url } = body;
+    console.log('Extracted URL:', url);
 
     if (!url) {
+      console.error('No URL provided in request');
       return NextResponse.json(
         { status: 'error', message: 'URL is required' },
         { status: 400 }
@@ -85,10 +90,12 @@ export async function POST(request: Request) {
     }
 
     const sanitizedUrl = sanitizeInstagramUrl(url);
+    console.log('Sanitized URL:', sanitizedUrl);
     
-    console.log('Fetching Instagram content for URL:', sanitizedUrl);
+    const apiUrl = `${API_ENDPOINT}?url=${encodeURIComponent(sanitizedUrl)}`;
+    console.log('Making request to:', apiUrl);
     
-    const response = await fetch(`${API_ENDPOINT}?url=${encodeURIComponent(sanitizedUrl)}`, {
+    const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         'X-RapidAPI-Key': API_KEY,
@@ -96,6 +103,9 @@ export async function POST(request: Request) {
       },
       next: { revalidate: 0 }
     });
+
+    console.log('API Response status:', response.status);
+    console.log('API Response headers:', Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -115,6 +125,7 @@ export async function POST(request: Request) {
     }
 
     const data = await response.json();
+    console.log('API Response data:', JSON.stringify(data, null, 2));
     
     // Handle error from the API
     if (!data.status) {
@@ -164,20 +175,7 @@ export async function POST(request: Request) {
       }));
     }
     
-    // Additional logging for debugging
-    console.log('Processed result info:', JSON.stringify({
-      id: result.info.id,
-      type: result.info.type,
-      shortcode: result.info.shortcode,
-      resourceCount: result.info.resources.length
-    }));
-    
-    if (result.info.resources && result.info.resources.length > 0) {
-      console.log('Resource URLs:');
-      result.info.resources.forEach((resource: Resource, index: number) => {
-        console.log(`Resource ${index}: ${resource.type} - ${resource.url.substring(0, 100)}...`);
-      });
-    }
+    console.log('Final processed result:', JSON.stringify(result, null, 2));
     
     return NextResponse.json(result);
   } catch (error) {

@@ -73,6 +73,8 @@ export const sanitizeInstagramUrl = (url: string): string => {
 // Function to fetch Instagram content
 export const fetchInstagramContent = async (url: string): Promise<InstagramApiResponse> => {
   try {
+    console.log('Fetching Instagram content for URL:', url);
+    
     const response = await fetch(API_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -81,12 +83,17 @@ export const fetchInstagramContent = async (url: string): Promise<InstagramApiRe
       body: JSON.stringify({ url }),
     });
 
+    console.log('Response status:', response.status);
+    
     if (!response.ok) {
       const errorData = await response.json();
+      console.error('API error response:', errorData);
       throw new Error(errorData.message || 'Failed to fetch content');
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log('API success response:', data);
+    return data;
   } catch (error) {
     console.error('Error fetching Instagram content:', error);
     throw error;
