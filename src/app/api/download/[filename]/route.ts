@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import axios from 'axios';
 
 export async function GET(
   request: NextRequest,
@@ -8,28 +7,34 @@ export async function GET(
 ) {
   try {
     const { filename } = params;
-    const filePath = path.join(process.cwd(), 'temp', filename);
+    const url = request.nextUrl.searchParams.get('url');
 
-    if (!fs.existsSync(filePath)) {
+    if (!url) {
       return NextResponse.json(
-        { error: 'File not found' },
-        { status: 404 }
+        { error: 'URL is required' },
+        { status: 400 }
       );
     }
 
-    const fileBuffer = fs.readFileSync(filePath);
+    const response = await axios.get(url, {
+      responseType: 'arraybuffer',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
+
     const contentType = filename.endsWith('.mp4') ? 'video/mp4' : 'image/jpeg';
 
-    return new NextResponse(fileBuffer, {
+    return new NextResponse(response.data, {
       headers: {
         'Content-Type': contentType,
         'Content-Disposition': `attachment; filename="${filename}"`,
       },
     });
   } catch (error) {
-    console.error('Error serving file:', error);
+    console.error('Error streaming file:', error);
     return NextResponse.json(
-      { error: 'Failed to serve file' },
+      { error: 'Failed to stream file' },
       { status: 500 }
     );
   }

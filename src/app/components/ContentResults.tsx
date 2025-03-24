@@ -226,17 +226,7 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
   const handleDownload = async (url: string, filename: string, index: number) => {
     try {
       setItemDownloadStatus(prev => ({ ...prev, [index]: true }));
-      const response = await axios.post('/api/download', {
-        url,
-        contentType: url.includes('.mp4') ? 'video' : 'image',
-        filename
-      });
-      
-      if (response.data.error) {
-        throw new Error(response.data.error);
-      }
-
-      const downloadUrl = `/api/download?file=${encodeURIComponent(response.data.file)}`;
+      const downloadUrl = `/api/download/${filename}?url=${encodeURIComponent(url)}`;
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = filename;
