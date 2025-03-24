@@ -55,7 +55,6 @@ function sanitizeInstagramUrl(url: string): string {
   return sanitizedUrl;
 }
 
-// POST handler for getting Instagram content
 export async function POST(request: Request) {
   console.log('Instagram API route handler called');
   
@@ -116,6 +115,7 @@ export async function POST(request: Request) {
           { status: response.status }
         );
       } catch (_) {
+        // Using underscore to indicate intentionally unused parameter
         return NextResponse.json(
           { status: 'error', error: `API request failed with status ${response.status}` },
           { status: response.status }
