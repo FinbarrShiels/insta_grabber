@@ -7,6 +7,7 @@ import UrlInputForm from '../components/UrlInputForm';
 import Footer from '../components/Footer';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import DownloadGuide from '../components/DownloadGuide';
+import FeaturesSection from '../components/FeaturesSection';
 
 export default function ProfileDownloaderPage() {
   const [activeTab, setActiveTab] = useState('profile');
@@ -73,6 +74,12 @@ export default function ProfileDownloaderPage() {
           {/* Download Guide Section */}
           <div className="max-w-4xl mx-auto w-full px-2 mt-12">
             <DownloadGuide />
+            
+            {/* Divider */}
+            <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
+            
+            {/* Features Section */}
+            <FeaturesSection />
           </div>
         </main>
         
