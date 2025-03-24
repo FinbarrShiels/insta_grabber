@@ -28,7 +28,7 @@ interface ContentData {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('carousel');
+  const [activeTab, setActiveTab] = useState('video');
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
