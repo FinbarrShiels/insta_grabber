@@ -16,6 +16,7 @@ import {
 } from '@heroicons/react/24/outline';
 import dynamic from 'next/dynamic';
 import ReactPlayer from 'react-player';
+import StoryGrid from './StoryGrid';
 
 // Dynamically import ReactPlayer to avoid SSR issues
 const DynamicReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
@@ -306,8 +307,27 @@ const MediaPreview: React.FC<{ data: ContentInfo }> = ({ data }) => {
     }
   };
 
+  // Handle download for StoryGrid
+  const handleStoryDownload = async (url: string, index: number) => {
+    try {
+      await handleDownload(url, `instagram-story-${index}.mp4`, index);
+    } catch (error) {
+      console.error('Failed to download story:', error);
+    }
+  };
+
   if (!data?.resources || data.resources.length === 0) {
     return <p className="text-white/80">No media preview available</p>;
+  }
+
+  // Check if it's a story content type
+  if (data.type === 'story') {
+    return (
+      <StoryGrid 
+        resources={data.resources}
+        onDownload={handleStoryDownload}
+      />
+    );
   }
 
   const itemCount = data.resources.length;

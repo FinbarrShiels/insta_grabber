@@ -42,25 +42,28 @@ const UrlInputForm: React.FC<UrlInputFormProps> = ({ onSubmit }) => {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste Instagram link here"
-          className="w-full px-5 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 text-white placeholder:text-white/70 pr-24 shadow-lg"
+          className="w-full px-5 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 text-white placeholder:text-white/70 pr-36 shadow-lg"
         />
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
-          {url && (
+          {url ? (
             <button
               type="button"
               onClick={handleClear}
-              className="p-2 text-white/70 hover:text-white transition-colors rounded-lg cursor-pointer hover:bg-white/10"
+              className="p-2 text-white/70 hover:text-white transition-colors rounded-lg flex items-center gap-1 px-3 hover:bg-white/10"
             >
               <XMarkIcon className="w-5 h-5" />
+              <span className="text-sm">Clear</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handlePaste}
+              className="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg flex items-center gap-1 px-3 cursor-pointer hover:bg-white/20"
+            >
+              <ClipboardDocumentIcon className="h-5 w-5" />
+              <span className="text-sm">Paste</span>
             </button>
           )}
-          <button
-            type="button"
-            onClick={handlePaste}
-            className="p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-lg cursor-pointer hover:bg-white/20"
-          >
-            <ClipboardDocumentIcon className="h-5 w-5" />
-          </button>
         </div>
       </div>
       
@@ -83,7 +86,7 @@ const UrlInputForm: React.FC<UrlInputFormProps> = ({ onSubmit }) => {
           </>
         ) : (
           <>
-            <ArrowDownTrayIcon className="h-5 w-5 animate-bounce-subtle" />
+            <ArrowDownTrayIcon className="h-5 w-5" />
             <span>Download</span>
           </>
         )}
