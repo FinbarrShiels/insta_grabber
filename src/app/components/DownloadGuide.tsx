@@ -8,7 +8,7 @@ const DownloadGuide: React.FC = () => {
     <div className="my-10 py-8 px-4 sm:px-8 bg-white/10 backdrop-blur-sm rounded-xl">
       <h2 className="text-center text-2xl md:text-3xl font-bold text-white mb-6">How to Download Instagram Content</h2>
       <p className="text-sm md:text-base text-white/90 text-center mb-8 max-w-2xl mx-auto">
-        You must follow these three easy steps to download video, reels, and photo from Instagram (IG, Insta).
+        You must follow these three easy steps to download videos, reels, photos and carousels from Instagram.
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -24,7 +24,7 @@ const DownloadGuide: React.FC = () => {
           </div>
           <h3 className="text-white font-semibold text-lg mb-2">Copy URL</h3>
           <p className="text-white/80 text-center text-sm md:text-base">
-            Open the Instagram application or website, copy the URL of the photo, video, reels, carousel, IGTV.
+            Open the Instagram application or website, copy the URL of the photo, video, reel, or carousel.
           </p>
           <div className="mt-4 w-full">
             <div className="relative w-full max-w-xs mx-auto">
@@ -52,8 +52,8 @@ const DownloadGuide: React.FC = () => {
           <p className="text-white/80 text-center text-sm md:text-base">
             Paste the URL into the text field above and click the &quot;Download&quot; button.
           </p>
-          <div className="mt-4 w-full">
-            <div className="w-4/5 h-12 bg-indigo-700 text-white rounded-lg flex items-center justify-center font-medium">
+          <div className="mt-4 w-full flex justify-center">
+            <div className="w-4/5 h-12 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg flex items-center justify-center font-medium shadow-md">
               Download
             </div>
           </div>
@@ -78,7 +78,7 @@ const DownloadGuide: React.FC = () => {
               <div className="w-4/5 h-12 bg-gray-800 text-white rounded-lg flex items-center justify-center gap-2 font-medium">
                 <span>reel_123.mp4</span>
               </div>
-              <div className="absolute right-0 top-0 w-1/4 h-12 bg-green-700 rounded-r-lg flex items-center justify-center">
+              <div className="absolute right-0 top-0 w-1/4 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-r-lg flex items-center justify-center">
                 <ArrowDownTrayIcon className="h-5 w-5 text-white" />
               </div>
             </div>
