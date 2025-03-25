@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Instagram Profile Picture Downloader | Download IG Profile Photos in HD',
-  description: 'Download Instagram profile pictures in full HD resolution. Save and view IG profile photos in original quality for free.',
-  keywords: 'instagram profile picture downloader, download instagram dp, save instagram profile photo, download IG profile picture, full HD profile image',
+  title: 'Instagram Profile Downloader | Save IG Profile Pictures in HD',
+  description: 'Download Instagram profile pictures in full resolution for free. Save profile photos from any IG account anonymously.',
+  keywords: 'instagram profile picture downloader, download instagram profile pic, save instagram profile photo, IG DP downloader, full size profile picture',
   openGraph: {
-    title: 'Instagram Profile Picture Downloader | Download IG Profile Photos in HD',
-    description: 'Download Instagram profile pictures in full HD resolution. Save and view IG profile photos in original quality for free.',
-    url: 'https://igrab.com/profile',
-    siteName: 'iGrab - Instagram Downloader',
+    title: 'Instagram Profile Downloader | Save IG Profile Pictures in HD',
+    description: 'Download Instagram profile pictures in full resolution for free. Save profile photos from any IG account anonymously.',
+    url: 'https://instagrab.io/profile',
+    siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://igrab.com/og-profile.jpg',
+        url: 'https://instagrab.io/og-profile.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Profile Picture Downloader',

@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Instagram Photo Downloader | Save IG Photos in Original Quality',
     description: 'Download Instagram photos in original quality for free. Save high-resolution IG photos directly to your device without watermarks.',
-    url: 'https://igrab.com/photo',
-    siteName: 'iGrab - Instagram Downloader',
+    url: 'https://instagrab.io/photo',
+    siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://igrab.com/og-photo.jpg',
+        url: 'https://instagrab.io/og-photo.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Photo Downloader',

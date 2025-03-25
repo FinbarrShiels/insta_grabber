@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Instagram Carousel Downloader | Download IG Multi-Post Slideshows',
-  description: 'Download Instagram carousel posts with multiple photos and videos. Save complete Instagram slideshows with all images.',
-  keywords: 'instagram carousel downloader, download instagram slideshows, save instagram multiple photos, download IG carousel, instagram album downloader',
+  title: 'Instagram Carousel Downloader | Save Multiple IG Photos & Videos',
+  description: 'Download Instagram carousel posts with multiple photos and videos. Save entire Instagram slideshows in original quality for free.',
+  keywords: 'instagram carousel downloader, download instagram slideshows, save instagram carousels, download IG album, instagram album saver',
   openGraph: {
-    title: 'Instagram Carousel Downloader | Download IG Multi-Post Slideshows',
-    description: 'Download Instagram carousel posts with multiple photos and videos. Save complete Instagram slideshows with all images.',
-    url: 'https://igrab.com/carousel',
-    siteName: 'iGrab - Instagram Downloader',
+    title: 'Instagram Carousel Downloader | Save Multiple IG Photos & Videos',
+    description: 'Download Instagram carousel posts with multiple photos and videos. Save entire Instagram slideshows in original quality for free.',
+    url: 'https://instagrab.io/carousel',
+    siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://igrab.com/og-carousel.jpg',
+        url: 'https://instagrab.io/og-carousel.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Carousel Downloader',

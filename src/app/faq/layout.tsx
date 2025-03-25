@@ -1,20 +1,20 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'FAQ - InstaGrab Instagram Downloader | Common Questions & Answers',
+  title: 'Frequently Asked Questions | InstaGrab Help Center',
   description: 'Find answers to frequently asked questions about using InstaGrab for downloading Instagram photos, videos, reels and stories. Learn how our tool works and get help.',
   keywords: 'instagram downloader faq, instagram download help, insta grabber help, instagram saving questions, instagram download guide',
   openGraph: {
-    title: 'FAQ - InstaGrab Instagram Downloader | Common Questions & Answers',
+    title: 'Frequently Asked Questions | InstaGrab Help Center',
     description: 'Find answers to frequently asked questions about using InstaGrab for downloading Instagram photos, videos, reels and stories.',
-    url: 'https://igrab.com/faq',
-    siteName: 'InstaGrab',
+    url: 'https://instagrab.io/faq',
+    siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://igrab.com/og-faq.jpg',
+        url: 'https://instagrab.io/og-faq.jpg',
         width: 1200,
         height: 630,
-        alt: 'InstaGrab FAQ',
+        alt: 'InstaGrab FAQ and Help',
       },
     ],
     locale: 'en_US',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FaqLayout({
+export default function FAQLayout({
   children,
 }: {
   children: React.ReactNode;
