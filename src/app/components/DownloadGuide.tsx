@@ -50,7 +50,7 @@ const DownloadGuide: React.FC = () => {
           </div>
           <h3 className="text-white font-semibold text-lg mb-2">Paste URL</h3>
           <p className="text-white/80 text-center text-sm md:text-base">
-            Paste the URL into the text field above and click the "Download" button.
+            Paste the URL into the text field above and click the &quot;Download&quot; button.
           </p>
           <div className="mt-4 w-full">
             <div className="w-4/5 h-12 bg-indigo-700 text-white rounded-lg flex items-center justify-center font-medium">
@@ -71,7 +71,7 @@ const DownloadGuide: React.FC = () => {
           </div>
           <h3 className="text-white font-semibold text-lg mb-2">Save Content</h3>
           <p className="text-white/80 text-center text-sm md:text-base">
-            Click the "Save" button and your content will be downloaded to your device.
+            Click the &quot;Save&quot; button and your content will be downloaded to your device.
           </p>
           <div className="mt-4 w-full">
             <div className="relative w-full max-w-xs mx-auto">

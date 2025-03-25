@@ -7,7 +7,6 @@ import {
   CameraIcon, 
   ViewColumnsIcon
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface TabNavigationProps {
