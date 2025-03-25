@@ -72,6 +72,18 @@ export const metadata: Metadata = {
   other: {
     "google-adsense-account": "ca-pub-1990518122312332",
   },
+  icons: {
+    icon: [
+      { url: '/favicon.svg' },
+      { url: '/icon-192.svg', sizes: '192x192', type: 'image/svg+xml' },
+      { url: '/icon-512.svg', sizes: '512x512', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: [
+      { url: '/icon-192.svg' },
+      { url: '/icon-512.svg', sizes: '512x512', type: 'image/svg+xml' },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -81,6 +93,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icon-192.svg" />
+      </head>
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1990518122312332"
