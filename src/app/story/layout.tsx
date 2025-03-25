@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Instagram Story Downloader | Save IG Stories Before They Disappear',
     description: 'Download Instagram stories in high quality before they disappear. Save IG stories anonymously without leaving a view trace.',
-    url: 'https://instagrab.io/story',
+    url: 'https://instagrab.download/story',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://instagrab.io/og-story.jpg',
+        url: 'https://instagrab.download/og-story.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Story Downloader',

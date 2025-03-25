@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Instagram Carousel Downloader | Save Multiple IG Photos & Videos',
     description: 'Download Instagram carousel posts with multiple photos and videos. Save entire Instagram slideshows in original quality for free.',
-    url: 'https://instagrab.io/carousel',
+    url: 'https://instagrab.download/carousel',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://instagrab.io/og-carousel.jpg',
+        url: 'https://instagrab.download/og-carousel.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Carousel Downloader',

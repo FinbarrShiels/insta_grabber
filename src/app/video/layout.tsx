@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Instagram Video Downloader | Download IG Videos in HD Quality',
     description: 'Download Instagram videos in HD quality without watermarks. Save IG videos directly to your device for free.',
-    url: 'https://instagrab.io/video',
+    url: 'https://instagrab.download/video',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://instagrab.io/og-video.jpg',
+        url: 'https://instagrab.download/og-video.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Video Downloader',

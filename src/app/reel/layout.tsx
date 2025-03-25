@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'InstaGrab – Download Instagram Reels & Videos Free | No Watermark',
     description: 'InstaGrab is the easiest way to download Instagram Reels quickly and for free. Save high-quality Reels videos without a watermark—no login required. Try our fast and secure Instagram video downloader today!',
-    url: 'https://instagrab.io/reel',
+    url: 'https://instagrab.download/reel',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://instagrab.io/og-reel.jpg',
+        url: 'https://instagrab.download/og-reel.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Reel Downloader',

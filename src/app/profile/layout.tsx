@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Instagram Profile Downloader | Save IG Profile Pictures in HD',
     description: 'Download Instagram profile pictures in full resolution for free. Save profile photos from any IG account anonymously.',
-    url: 'https://instagrab.io/profile',
+    url: 'https://instagrab.download/profile',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
       {
-        url: 'https://instagrab.io/og-profile.jpg',
+        url: 'https://instagrab.download/og-profile.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Profile Picture Downloader',
