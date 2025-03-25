@@ -13,12 +13,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/carousel',
     '/profile',
     '/faq',
+    '/terms',
+    '/privacy',
   ];
 
   return routes.map(route => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency: 'daily',
-    priority: route === '' ? 1.0 : 0.8,
+    changeFrequency: route === '/terms' || route === '/privacy' ? 'monthly' : 'daily',
+    priority: route === '' ? 1.0 : route === '/terms' || route === '/privacy' ? 0.5 : 0.8,
   }));
 } 
