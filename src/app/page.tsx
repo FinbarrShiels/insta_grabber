@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import DownloadGuide from './components/DownloadGuide';
 import FeaturesSection from './components/FeaturesSection';
 import { fetchInstagramContent } from './utils/api';
+import { WebsiteJsonLd, SoftwareApplicationJsonLd, FAQJsonLd } from './components/JsonLd';
 
 interface ContentData {
   info: {
@@ -28,6 +29,30 @@ interface ContentData {
   };
   error?: string;
 }
+
+// FAQ data for structured data
+const faqData = [
+  {
+    question: "How do I download Instagram content using InstaGrab?",
+    answer: "Simply copy the URL of any Instagram post, reel, or story you want to download, paste it into the URL field on our site, and click Download. We'll process your request and provide download options."
+  },
+  {
+    question: "Is InstaGrab free to use?",
+    answer: "Yes, InstaGrab is completely free to use. There are no hidden fees or subscriptions required."
+  },
+  {
+    question: "Do I need to create an account to use InstaGrab?",
+    answer: "No, you don't need to create an account or login to use InstaGrab. It's a direct and anonymous service."
+  },
+  {
+    question: "Can I download private Instagram content?",
+    answer: "No, InstaGrab works only with publicly available Instagram content that is accessible without login."
+  },
+  {
+    question: "What types of Instagram content can I download?",
+    answer: "You can download photos, videos, reels, stories, and carousel posts (multiple photos/videos in a single post)."
+  }
+];
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('video');
@@ -78,6 +103,11 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
+      {/* Structured Data */}
+      <WebsiteJsonLd />
+      <SoftwareApplicationJsonLd />
+      <FAQJsonLd questions={faqData} />
+      
       <Header />
       
       <div className="container mx-auto px-4 mb-8 flex-grow max-w-[900px]">
