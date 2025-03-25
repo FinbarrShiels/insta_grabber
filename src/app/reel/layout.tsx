@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Instagram Reel Downloader | Download IG Reels Without Watermark',
-  description: 'Download Instagram reels in HD quality without watermarks. Save IG reels in original quality for free.',
-  keywords: 'instagram reel downloader, download instagram reels, save instagram reels, download IG reels, no watermark reels, hd reels download',
+  title: 'InstaGrab – Download Instagram Reels & Videos Free | No Watermark',
+  description: 'InstaGrab is the easiest way to download Instagram Reels quickly and for free. Save high-quality Reels videos without a watermark—no login required. Try our fast and secure Instagram video downloader today!',
+  keywords: 'Instagram Reels Downloader, Download Instagram Reels, Save Reels Video, Fast Reels Download, Reels Video Saver, IG Reels Downloader, Download Reels Without Watermark, Instagram Video Downloader, Save IG Videos Online, Free Reels Downloader',
   openGraph: {
-    title: 'Instagram Reel Downloader | Download IG Reels Without Watermark',
-    description: 'Download Instagram reels in HD quality without watermarks. Save IG reels in original quality for free.',
+    title: 'InstaGrab – Download Instagram Reels & Videos Free | No Watermark',
+    description: 'InstaGrab is the easiest way to download Instagram Reels quickly and for free. Save high-quality Reels videos without a watermark—no login required. Try our fast and secure Instagram video downloader today!',
     url: 'https://igrab.com/reel',
     siteName: 'iGrab - Instagram Downloader',
     images: [
