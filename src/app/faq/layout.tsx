@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'InstaGrab FAQ - Common Questions About Instagram Content Downloader',
-  description: 'Find answers to common questions about using InstaGrab to download Instagram content.',
+  title: 'InstaGrab Help Center - Frequently Asked Questions',
+  description: 'Get answers to common questions about using InstaGrab. Learn how to download Instagram content, troubleshoot issues, and understand our service better.',
   keywords: 'instagram downloader faq, frequently asked questions, help center, support, how to use instagram downloader',
   alternates: {
     canonical: 'https://www.instagrab.download/faq',
   },
   openGraph: {
-    title: 'InstaGrab FAQ - Common Questions About Instagram Content Downloader',
-    description: 'Find answers to common questions about using InstaGrab to download Instagram content.',
+    title: 'InstaGrab Help Center - Frequently Asked Questions',
+    description: 'Get answers to common questions about using InstaGrab. Learn how to download Instagram content, troubleshoot issues, and understand our service better.',
     url: 'https://www.instagrab.download/faq',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         url: 'https://www.instagrab.download/og-faq.jpg',
         width: 1200,
         height: 630,
-        alt: 'InstaGrab FAQ',
+        alt: 'InstaGrab Help Center',
       },
     ],
     locale: 'en_US',

@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'InstaGrab Privacy Policy - Data Protection & Security',
-  description: 'Learn about how InstaGrab collects, uses, and protects your personal information.',
+  title: 'InstaGrab Privacy Policy - Your Data Protection Guide',
+  description: 'Learn how InstaGrab protects your privacy and handles your data. Our comprehensive privacy policy explains our data collection, usage, and protection practices.',
   keywords: 'instagram downloader privacy, privacy policy, InstaGrab privacy, data protection, GDPR compliance',
   alternates: {
     canonical: 'https://www.instagrab.download/privacy',
   },
   openGraph: {
-    title: 'InstaGrab Privacy Policy - Data Protection & Security',
-    description: 'Learn about how InstaGrab collects, uses, and protects your personal information.',
+    title: 'InstaGrab Privacy Policy - Your Data Protection Guide',
+    description: 'Learn how InstaGrab protects your privacy and handles your data. Our comprehensive privacy policy explains our data collection, usage, and protection practices.',
     url: 'https://www.instagrab.download/privacy',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [

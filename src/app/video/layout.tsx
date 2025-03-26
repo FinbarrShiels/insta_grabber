@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'InstaGrab Video Downloader - Save Instagram Videos in HD',
-  description: 'Download Instagram videos in high quality for free. Save IG videos directly to your device without watermarks. Fast and easy to use.',
+  title: 'Instagram Video Downloader - Save Full HD IG Videos',
+  description: 'Download Instagram videos in full HD quality. Save IG videos without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram video content.',
   keywords: 'instagram video downloader, download instagram videos, save instagram videos, download IG videos, HD instagram videos',
   alternates: {
     canonical: 'https://www.instagrab.download/video',
   },
   openGraph: {
-    title: 'InstaGrab Video Downloader - Save Instagram Videos in HD',
-    description: 'Download Instagram videos in high quality for free. Save IG videos directly to your device without watermarks. Fast and easy to use.',
+    title: 'Instagram Video Downloader - Save Full HD IG Videos',
+    description: 'Download Instagram videos in full HD quality. Save IG videos without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram video content.',
     url: 'https://www.instagrab.download/video',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         url: 'https://www.instagrab.download/og-video.jpg',
         width: 1200,
         height: 630,
-        alt: 'InstaGrab Video Downloader',
+        alt: 'Instagram Video Downloader',
       },
     ],
     locale: 'en_US',

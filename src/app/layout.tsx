@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.instagrab.download'),
-  title: "InstaGrab - Download Instagram Content in HD Quality",
-  description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
+  title: "InstaGrab - Free Instagram Content Downloader Tool",
+  description: "The fastest and most reliable Instagram content downloader. Save photos, videos, reels, stories, and carousels in HD quality without watermarks. No registration required.",
   applicationName: 'InstaGrab',
   keywords: "instagram downloader, download instagram videos, download instagram photos, download instagram reels, download instagram stories, instagram content saver",
   authors: [{ name: 'InstaGrab Team' }],
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     canonical: 'https://www.instagrab.download',
   },
   openGraph: {
-    title: "InstaGrab - Download Instagram Content in HD Quality",
-    description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
+    title: "InstaGrab - Free Instagram Content Downloader Tool",
+    description: "The fastest and most reliable Instagram content downloader. Save photos, videos, reels, stories, and carousels in HD quality without watermarks. No registration required.",
     url: 'https://www.instagrab.download',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
@@ -48,8 +48,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "InstaGrab - Download Instagram Content in HD Quality",
-    description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
+    title: "InstaGrab - Free Instagram Content Downloader Tool",
+    description: "The fastest and most reliable Instagram content downloader. Save photos, videos, reels, stories, and carousels in HD quality without watermarks. No registration required.",
     images: ['https://www.instagrab.download/og-main.jpg'],
   },
   viewport: {
