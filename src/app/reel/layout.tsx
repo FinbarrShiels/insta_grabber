@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'InstaGrab – Download Instagram Reels & Videos Free | No Watermark',
-  description: 'InstaGrab is the easiest way to download Instagram Reels quickly and for free. Save high-quality Reels videos without a watermark—no login required. Try our fast and secure Instagram video downloader today!',
-  keywords: 'Instagram Reels Downloader, Download Instagram Reels, Save Reels Video, Fast Reels Download, Reels Video Saver, IG Reels Downloader, Download Reels Without Watermark, Instagram Video Downloader, Save IG Videos Online, Free Reels Downloader',
+  title: 'Instagram Reel Downloader | Save IG Reels in HD Quality',
+  description: 'Download Instagram Reels in high quality for free. Save IG Reels directly to your device without watermarks. Fast and easy to use.',
+  keywords: 'instagram reel downloader, download instagram reels, save instagram reels, download IG reels, HD quality instagram reels',
+  alternates: {
+    canonical: 'https://instagrab.download/reel',
+  },
   openGraph: {
-    title: 'InstaGrab – Download Instagram Reels & Videos Free | No Watermark',
-    description: 'InstaGrab is the easiest way to download Instagram Reels quickly and for free. Save high-quality Reels videos without a watermark—no login required. Try our fast and secure Instagram video downloader today!',
+    title: 'Instagram Reel Downloader | Save IG Reels in HD Quality',
+    description: 'Download Instagram Reels in high quality for free. Save IG Reels directly to your device without watermarks. Fast and easy to use.',
     url: 'https://instagrab.download/reel',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
@@ -19,6 +22,16 @@ export const metadata: Metadata = {
     ],
     locale: 'en_US',
     type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

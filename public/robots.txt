@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /reel
+Allow: /photo
+Allow: /video
+Allow: /story
+Allow: /carousel
+Allow: /faq
+Allow: /privacy
+Allow: /terms
+
+Sitemap: https://instagrab.download/sitemap.xml 
