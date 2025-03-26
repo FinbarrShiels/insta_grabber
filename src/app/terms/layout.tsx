@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | InstaGrab',
-  description: 'Read InstaGrab\'s Terms of Service. These terms govern your use of our Instagram content downloader service.',
+  title: 'InstaGrab Terms of Service - Usage Guidelines & Rules',
+  description: 'Read our terms of service to understand how to use InstaGrab responsibly and legally.',
   keywords: 'instagram downloader terms, terms of service, InstaGrab terms, legal agreement, terms and conditions',
   alternates: {
     canonical: 'https://www.instagrab.download/terms',
   },
   openGraph: {
-    title: 'Terms of Service | InstaGrab',
+    title: 'InstaGrab Terms of Service - Usage Guidelines & Rules',
     description: 'Read our terms of service to understand how to use InstaGrab responsibly and legally.',
     url: 'https://www.instagrab.download/terms',
     siteName: 'InstaGrab - Instagram Content Downloader',
@@ -22,6 +22,16 @@ export const metadata: Metadata = {
     ],
     locale: 'en_US',
     type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

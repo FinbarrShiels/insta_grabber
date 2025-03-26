@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | InstaGrab',
-  description: 'Learn how InstaGrab collects, uses, and protects your data. Our privacy policy explains our commitment to safeguarding your information.',
+  title: 'InstaGrab Privacy Policy - Data Protection & Security',
+  description: 'Learn about how InstaGrab collects, uses, and protects your personal information.',
   keywords: 'instagram downloader privacy, privacy policy, InstaGrab privacy, data protection, GDPR compliance',
   alternates: {
     canonical: 'https://www.instagrab.download/privacy',
   },
   openGraph: {
-    title: 'Privacy Policy | InstaGrab',
+    title: 'InstaGrab Privacy Policy - Data Protection & Security',
     description: 'Learn about how InstaGrab collects, uses, and protects your personal information.',
     url: 'https://www.instagrab.download/privacy',
     siteName: 'InstaGrab - Instagram Content Downloader',
@@ -22,6 +22,16 @@ export const metadata: Metadata = {
     ],
     locale: 'en_US',
     type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

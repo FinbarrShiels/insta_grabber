@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions | InstaGrab',
+  title: 'InstaGrab FAQ - Common Questions About Instagram Content Downloader',
   description: 'Find answers to common questions about using InstaGrab to download Instagram content.',
   keywords: 'instagram downloader faq, frequently asked questions, help center, support, how to use instagram downloader',
   alternates: {
     canonical: 'https://www.instagrab.download/faq',
   },
   openGraph: {
-    title: 'Frequently Asked Questions | InstaGrab',
+    title: 'InstaGrab FAQ - Common Questions About Instagram Content Downloader',
     description: 'Find answers to common questions about using InstaGrab to download Instagram content.',
     url: 'https://www.instagrab.download/faq',
     siteName: 'InstaGrab - Instagram Content Downloader',

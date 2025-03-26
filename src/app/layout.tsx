@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.instagrab.download'),
-  title: "Instagram Downloader | Download Instagram Videos, Photos, Reels",
+  title: "InstaGrab - Download Instagram Content in HD Quality",
   description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
   applicationName: 'InstaGrab',
-  keywords: ['instagram downloader', 'download instagram', 'instagram video downloader', 'instagram photo downloader', 'instagram reel downloader', 'instagram story downloader', 'download stories', 'save instagram videos'],
+  keywords: "instagram downloader, download instagram videos, download instagram photos, download instagram reels, download instagram stories, instagram content saver",
   authors: [{ name: 'InstaGrab Team' }],
   creator: 'InstaGrab',
   publisher: 'InstaGrab',
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     canonical: 'https://www.instagrab.download',
   },
   openGraph: {
-    title: 'Instagram Content Downloader | Save Photos, Videos, Reels & Stories',
-    description: 'Download Instagram content in high quality for free. Save photos, videos, reels, stories, and carousels directly to your device without watermarks.',
+    title: "InstaGrab - Download Instagram Content in HD Quality",
+    description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
     url: 'https://www.instagrab.download',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
         url: 'https://www.instagrab.download/og-main.jpg',
         width: 1200,
         height: 630,
-        alt: 'Instagram Content Downloader',
+        alt: 'InstaGrab - Instagram Content Downloader',
       },
     ],
     locale: 'en_US',
@@ -48,8 +48,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Instagram Content Downloader | Save Photos, Videos, Reels & Stories',
-    description: 'Download Instagram content in high quality for free. Save photos, videos, reels, stories, and carousels directly to your device without watermarks.',
+    title: "InstaGrab - Download Instagram Content in HD Quality",
+    description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
     images: ['https://www.instagrab.download/og-main.jpg'],
   },
   viewport: {
