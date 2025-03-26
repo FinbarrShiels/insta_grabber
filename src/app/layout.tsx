@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://instagrab.download',
   },
   openGraph: {
     type: 'website',
