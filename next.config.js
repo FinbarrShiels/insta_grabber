@@ -4,6 +4,7 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
+  trailingSlash: false,
   images: {
     remotePatterns: [
       {
