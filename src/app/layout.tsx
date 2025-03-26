@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: 'https://instagrab.download',
+    canonical: 'https://instagrab.download/',
   },
   openGraph: {
     type: 'website',
     siteName: 'InstaGrab - Instagram Content Downloader',
     title: 'InstaGrab - Download Instagram Videos, Photos, Reels & Stories',
     description: 'Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!',
-    url: 'https://instagrab.download',
+    url: 'https://instagrab.download/',
     images: [
       {
         url: 'https://instagrab.download/og-main.jpg',
