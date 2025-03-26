@@ -11,10 +11,10 @@ export const WebsiteJsonLd = () => {
           '@context': 'https://schema.org',
           '@type': 'WebSite',
           name: 'InstaGrab - Instagram Content Downloader',
-          url: 'https://instagrab.download',
+          url: 'https://www.instagrab.download',
           potentialAction: {
             '@type': 'SearchAction',
-            target: 'https://instagrab.download/?url={search_term_string}',
+            target: 'https://www.instagrab.download/?url={search_term_string}',
             'query-input': 'required name=search_term_string'
           },
           description: 'Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!',
@@ -23,7 +23,7 @@ export const WebsiteJsonLd = () => {
             name: 'InstaGrab',
             logo: {
               '@type': 'ImageObject',
-              url: 'https://instagrab.download/logo.png'
+              url: 'https://www.instagrab.download/logo.png'
             }
           }
         })

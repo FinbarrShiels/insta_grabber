@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://instagrab.download'),
+  metadataBase: new URL('https://www.instagrab.download'),
   title: "Instagram Downloader | Download Instagram Videos, Photos, Reels",
   description: "Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!",
   applicationName: 'InstaGrab',
@@ -28,28 +28,29 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: 'https://instagrab.download',
+    canonical: 'https://www.instagrab.download',
   },
   openGraph: {
-    type: 'website',
+    title: 'Instagram Content Downloader | Save Photos, Videos, Reels & Stories',
+    description: 'Download Instagram content in high quality for free. Save photos, videos, reels, stories, and carousels directly to your device without watermarks.',
+    url: 'https://www.instagrab.download',
     siteName: 'InstaGrab - Instagram Content Downloader',
-    title: 'InstaGrab - Download Instagram Videos, Photos, Reels & Stories',
-    description: 'Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!',
-    url: 'https://instagrab.download',
     images: [
       {
-        url: 'https://instagrab.download/og-main.jpg',
+        url: 'https://www.instagrab.download/og-main.jpg',
         width: 1200,
         height: 630,
-        alt: 'InstaGrab - Instagram Content Downloader',
+        alt: 'Instagram Content Downloader',
       },
     ],
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'InstaGrab - Download Instagram Videos, Photos, Reels & Stories',
-    description: 'Download Instagram Videos, Photos, Reels, Stories & Carousels easily with InstaGrab. No watermarks, fast and free!',
-    images: ['https://instagrab.download/og-main.jpg'],
+    title: 'Instagram Content Downloader | Save Photos, Videos, Reels & Stories',
+    description: 'Download Instagram content in high quality for free. Save photos, videos, reels, stories, and carousels directly to your device without watermarks.',
+    images: ['https://www.instagrab.download/og-main.jpg'],
   },
   viewport: {
     width: 'device-width',

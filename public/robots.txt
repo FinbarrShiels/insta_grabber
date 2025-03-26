@@ -9,4 +9,4 @@ Allow: /faq
 Allow: /privacy
 Allow: /terms
 
-Sitemap: https://instagrab.download/sitemap.xml 
+Sitemap: https://www.instagrab.download/sitemap.xml 
