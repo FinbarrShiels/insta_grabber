@@ -1,4 +1,4 @@
 interface Window {
-  dataLayer: any[];
-  gtag: (...args: any[]) => void;
+  dataLayer: Array<Record<string, unknown>>;
+  gtag: (command: string, ...args: unknown[]) => void;
 } 
