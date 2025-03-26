@@ -1,5 +1,4 @@
 import React from 'react';
-import { HeartIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 
 const Footer: React.FC = () => {
