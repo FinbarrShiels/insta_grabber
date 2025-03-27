@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   title: "InstaGrab - Free Instagram Content Downloader Tool",
   description: "The fastest and most reliable Instagram content downloader. Save photos, videos, reels, stories, and carousels in HD quality without watermarks. No registration required.",
   applicationName: 'InstaGrab',
-  keywords: "instagram downloader, download instagram videos, download instagram photos, download instagram reels, download instagram stories, instagram content saver",
   authors: [{ name: 'InstaGrab Team' }],
   creator: 'InstaGrab',
   publisher: 'InstaGrab',

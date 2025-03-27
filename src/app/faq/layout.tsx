@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'InstaGrab Help Center - Frequently Asked Questions',
   description: 'Get answers to common questions about using InstaGrab. Learn how to download Instagram content, troubleshoot issues, and understand our service better.',
-  keywords: 'instagram downloader faq, frequently asked questions, help center, support, how to use instagram downloader',
   alternates: {
     canonical: 'https://www.instagrab.download/faq',
   },

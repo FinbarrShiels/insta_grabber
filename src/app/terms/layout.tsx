@@ -1,15 +1,14 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'InstaGrab Terms of Service - Usage Guidelines & Rules',
-  description: 'Read our terms of service to understand how to use InstaGrab responsibly and legally.',
-  keywords: 'instagram downloader terms, terms of service, InstaGrab terms, legal agreement, terms and conditions',
+  title: 'InstaGrab Terms of Service - Usage Rules & Guidelines',
+  description: 'Read our terms of service to understand how to use InstaGrab responsibly. Learn about our usage rules, guidelines, and your responsibilities when using our service.',
   alternates: {
     canonical: 'https://www.instagrab.download/terms',
   },
   openGraph: {
-    title: 'InstaGrab Terms of Service - Usage Guidelines & Rules',
-    description: 'Read our terms of service to understand how to use InstaGrab responsibly and legally.',
+    title: 'InstaGrab Terms of Service - Usage Rules & Guidelines',
+    description: 'Read our terms of service to understand how to use InstaGrab responsibly. Learn about our usage rules, guidelines, and your responsibilities when using our service.',
     url: 'https://www.instagrab.download/terms',
     siteName: 'InstaGrab - Instagram Content Downloader',
     images: [
