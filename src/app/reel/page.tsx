@@ -6,8 +6,6 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
-import DownloadGuide from '../components/DownloadGuide';
-import FeaturesSection from '../components/FeaturesSection';
 import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
@@ -113,15 +111,6 @@ export default function ReelDownloaderPage() {
           data={data}
           contentType={activeTab}
         />
-        
-        {/* Download Guide Section */}
-        <DownloadGuide />
-        
-        {/* Divider */}
-        <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
-        
-        {/* Features Section */}
-        <FeaturesSection />
       </div>
       
       <Footer />
