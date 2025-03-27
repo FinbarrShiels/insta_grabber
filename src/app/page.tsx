@@ -53,14 +53,14 @@ const faqData = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('video');
-  const [url, setUrl] = useState('');
+  const [activeTab, setActiveTab] = useState('');
+  const [submittedUrl, setSubmittedUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ContentData | null>(null);
 
   const handleUrlSubmit = async (submittedUrl: string) => {
-    setUrl(submittedUrl);
+    setSubmittedUrl(submittedUrl);
     setLoading(true);
     setError(null);
     setData(null);
@@ -111,7 +111,7 @@ export default function Home() {
       <div className="container mx-auto px-4 pb-20 max-w-[900px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             Instagram <span className="text-white">Downloader</span>
           </h1>
           <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
@@ -131,7 +131,7 @@ export default function Home() {
         
         {/* Results Section */}
         <ContentResults 
-          submittedUrl={url}
+          submittedUrl={submittedUrl}
           loading={loading}
           error={error}
           data={data}

@@ -38,14 +38,14 @@ export default function PhotoDownloaderPage() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ContentData | null>(null);
 
-  const handleUrlSubmit = async (url: string) => {
-    setSubmittedUrl(url);
+  const handleUrlSubmit = async (submittedUrl: string) => {
+    setSubmittedUrl(submittedUrl);
     setLoading(true);
     setError(null);
     setData(null);
 
     try {
-      const response = await fetchInstagramContent(url);
+      const response = await fetchInstagramContent(submittedUrl);
       if (response.status === 'error') {
         setError(response.message || 'Failed to fetch content');
         return;
@@ -81,30 +81,30 @@ export default function PhotoDownloaderPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
       <Header />
-
+      
       <div className="container mx-auto px-4 pb-20 max-w-[900px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             Instagram <span className="text-white">Photo Downloader</span>
           </h1>
           <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
             Download Instagram Photos in HD quality without watermarks
           </p>
         </div>
-
+        
         {/* Tab Navigation */}
         <div className="mb-5">
           <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         </div>
-
+        
         {/* URL Input Form */}
         <div className="mb-8">
           <UrlInputForm onSubmit={handleUrlSubmit} />
         </div>
-
+        
         {/* Results Section */}
-        <ContentResults
+        <ContentResults 
           submittedUrl={submittedUrl}
           loading={loading}
           error={error}
@@ -112,7 +112,7 @@ export default function PhotoDownloaderPage() {
           contentType={activeTab}
         />
       </div>
-
+      
       <Footer />
     </main>
   );

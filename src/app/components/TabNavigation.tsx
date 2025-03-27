@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Tab } from '@headlessui/react';
 import { 
   VideoCameraIcon, 
@@ -7,7 +8,6 @@ import {
   CameraIcon, 
   ViewColumnsIcon
 } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
 
 interface TabNavigationProps {
   activeTab: string;
@@ -16,7 +16,7 @@ interface TabNavigationProps {
 
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange }) => {
   const router = useRouter();
-  
+
   const tabs = [
     {
       id: 'video',
@@ -50,9 +50,9 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
     }
   ];
 
-  // Find the index of the active tab
-  const activeIndex = tabs.findIndex(tab => tab.id === activeTab);
-  
+  // Find the index of the active tab, return -1 if no active tab or on home page
+  const activeIndex = activeTab ? tabs.findIndex(tab => tab.id === activeTab) : -1;
+
   // Handle tab click with navigation
   const handleTabClick = (index: number) => {
     onTabChange(tabs[index].id);
@@ -61,15 +61,15 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
 
   return (
     <div className="bg-white/15 backdrop-blur-sm rounded-xl p-1.5 shadow-lg max-w-[900px] mx-auto">
-      <Tab.Group selectedIndex={activeIndex} onChange={handleTabClick}>
+      <Tab.Group selectedIndex={activeIndex === -1 ? undefined : activeIndex} onChange={handleTabClick}>
         <Tab.List className="flex space-x-1">
           {tabs.map((tab) => (
             <Tab
               key={tab.id}
               className={({ selected }) => `
                 flex-1 py-3 px-2 rounded-lg outline-none ring-transparent transition-all duration-200
-                ${selected 
-                  ? 'bg-white/20 text-white font-medium shadow-sm' 
+                ${selected
+                  ? 'bg-white/20 text-white font-medium shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/10'}
                 flex flex-col items-center justify-center gap-1.5 cursor-pointer
               `}

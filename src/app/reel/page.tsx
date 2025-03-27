@@ -6,6 +6,8 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
+import DownloadGuide from '../components/DownloadGuide';
+import FeaturesSection from '../components/FeaturesSection';
 import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
@@ -85,7 +87,7 @@ export default function ReelDownloaderPage() {
       <div className="container mx-auto px-4 pb-20 max-w-[900px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             Instagram <span className="text-white">Reel Downloader</span>
           </h1>
           <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
@@ -111,6 +113,15 @@ export default function ReelDownloaderPage() {
           data={data}
           contentType={activeTab}
         />
+        
+        {/* Download Guide Section */}
+        <DownloadGuide />
+        
+        {/* Divider */}
+        <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
+        
+        {/* Features Section */}
+        <FeaturesSection />
       </div>
       
       <Footer />
