@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Tab } from '@headlessui/react';
 import { 
   VideoCameraIcon, 
@@ -53,10 +54,11 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
   // Find the index of the active tab, return -1 if no active tab or on home page
   const activeIndex = activeTab ? tabs.findIndex(tab => tab.id === activeTab) : -1;
 
-  // Handle tab click with navigation
+  // Handle tab click with navigation - always navigate regardless of current tab
   const handleTabClick = (index: number) => {
-    onTabChange(tabs[index].id);
-    router.push(tabs[index].href);
+    const selectedTab = tabs[index];
+    onTabChange(selectedTab.id);
+    router.push(selectedTab.href);
   };
 
   return (
@@ -66,14 +68,21 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
           {tabs.map((tab) => (
             <Tab
               key={tab.id}
+              as="a"
+              href={tab.href}
               className={({ selected }) => `
                 flex-1 py-3 px-2 rounded-lg outline-none ring-transparent transition-all duration-200
-                ${selected
+                ${selected 
                   ? 'bg-white/20 text-white font-medium shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/10'}
                 flex flex-col items-center justify-center gap-1.5 cursor-pointer
               `}
               aria-label={tab.label}
+              onClick={(e) => {
+                e.preventDefault(); // Prevent default anchor behavior
+                const index = tabs.findIndex(t => t.id === tab.id);
+                handleTabClick(index);
+              }}
             >
               <tab.icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
               <span className="hidden sm:inline-block text-xs sm:text-sm font-medium whitespace-nowrap">

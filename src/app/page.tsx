@@ -53,7 +53,7 @@ const faqData = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('');
+  const [activeTab, setActiveTab] = useState<string>('');
   const [submittedUrl, setSubmittedUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
