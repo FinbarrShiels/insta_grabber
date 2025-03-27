@@ -7,6 +7,7 @@ import {
   FilmIcon, 
   ViewColumnsIcon 
 } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 const FeaturesSection: React.FC = () => {
   return (
@@ -22,96 +23,114 @@ const FeaturesSection: React.FC = () => {
       {/* Features Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
         {/* Video Downloader */}
-        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden shadow-lg border border-white/10">
-          <div className="p-6 flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <VideoCameraIcon className="h-6 w-6 text-blue-400" />
-                <h3 className="text-xl font-bold text-blue-400">Video Downloader</h3>
-              </div>
-              <p className="text-white/80 mb-4">
-                InstaGrab supports Instagram video download for singular videos and 
-                multiple videos from carousels. InstaGrab is created to enable you to 
-                download IG videos from your personal page.
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/3 p-6">
+              <h3 className="text-lg font-semibold text-blue-600 mb-3">Video Downloader</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                InstaGrab supports Instagram video download for regular videos and multiple videos from carousels. InstaGrab is created to enable you to download IG videos from your preferred page.
               </p>
             </div>
-            <div className="md:w-1/3 relative aspect-square rounded-lg overflow-hidden bg-purple-900/30 flex-shrink-0">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                  <VideoCameraIcon className="h-6 w-6 text-white" />
-                </div>
+            <div className="md:w-1/3 bg-gradient-to-r from-purple-50 to-pink-50 flex items-center justify-center p-4">
+              <div className="relative w-full h-32 md:h-full">
+                <Image 
+                  src="/images/video-downloader.svg" 
+                  alt="Video Downloader"
+                  className="rounded object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
             </div>
           </div>
         </div>
         
         {/* Photos Downloader */}
-        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden shadow-lg border border-white/10">
-          <div className="p-6 flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <PhotoIcon className="h-6 w-6 text-pink-400" />
-                <h3 className="text-xl font-bold text-pink-400">Photos Downloader</h3>
-              </div>
-              <p className="text-white/80 mb-4">
-                Instagram photo download provided by InstaGrab is a great tool for saving
-                images from Instagram posts. With InstaGrab, you can download a single
-                post image and multiple Instagram photos (carousel).
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/3 p-6">
+              <h3 className="text-lg font-semibold text-blue-600 mb-3">Photos Downloader</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Instagram photo download provided by InstaGrab is a great tool for saving images from Instagram posts. With InstaGrab, you can download a single image or all images from a carousel in original high resolution.
               </p>
             </div>
-            <div className="md:w-1/3 relative aspect-square rounded-lg overflow-hidden bg-purple-900/30 flex-shrink-0">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                  <PhotoIcon className="h-6 w-6 text-white" />
-                </div>
+            <div className="md:w-1/3 bg-gradient-to-r from-purple-50 to-pink-50 flex items-center justify-center p-4">
+              <div className="relative w-full h-32 md:h-full">
+                <Image 
+                  src="/images/photo-downloader.svg" 
+                  alt="Photos Downloader"
+                  className="rounded object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
             </div>
           </div>
         </div>
         
         {/* Reels Downloader */}
-        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden shadow-lg border border-white/10">
-          <div className="p-6 flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <FilmIcon className="h-6 w-6 text-orange-400" />
-                <h3 className="text-xl font-bold text-orange-400">Reels Downloader</h3>
-              </div>
-              <p className="text-white/80 mb-4">
-                Reels is a new video format that clones the principle of TikTok.
-                Instagram Reels download with the help of InstaGrab. Our Instagram Reels
-                downloader can help you to save your favorite Reels videos.
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/3 p-6">
+              <h3 className="text-lg font-semibold text-blue-600 mb-3">Reels Downloader</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Reels is a relatively new feature on Instagram, and you can download Instagram Reels with the help of InstaGrab. Our Instagram Reels downloader can help you to save your favorite Reels videos.
               </p>
             </div>
-            <div className="md:w-1/3 relative aspect-square rounded-lg overflow-hidden bg-purple-900/30 flex-shrink-0">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                  <FilmIcon className="h-6 w-6 text-white" />
-                </div>
+            <div className="md:w-1/3 bg-gradient-to-r from-purple-50 to-pink-50 flex items-center justify-center p-4">
+              <div className="relative w-full h-32 md:h-full">
+                <Image 
+                  src="/images/reels-downloader.svg" 
+                  alt="Reels Downloader"
+                  className="rounded object-cover"
+                  fill
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Story Downloader (replacing IGTV) */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/3 p-6">
+              <h3 className="text-lg font-semibold text-blue-600 mb-3">Story Downloader</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Instagram Stories disappear after 24 hours, but with InstaGrab you can download and save Stories before they expire. Our Story downloader helps you preserve these temporary moments to enjoy them later.
+              </p>
+            </div>
+            <div className="md:w-1/3 bg-gradient-to-r from-purple-50 to-pink-50 flex items-center justify-center p-4">
+              <div className="relative w-full h-32 md:h-full">
+                <Image 
+                  src="/images/story-downloader.svg" 
+                  alt="Story Downloader"
+                  className="rounded object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
             </div>
           </div>
         </div>
         
         {/* Carousel/Album Downloader */}
-        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl overflow-hidden shadow-lg border border-white/10">
-          <div className="p-6 flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <ViewColumnsIcon className="h-6 w-6 text-purple-400" />
-                <h3 className="text-xl font-bold text-purple-400">Carousel / Album Downloader</h3>
-              </div>
-              <p className="text-white/80 mb-4">
-                Carousel, also known as Album or Gallery post type with multiple 
-                photos, videos, or mixed content. If you need to download multiple
-                photos from Instagram, the InstaGrab is the best to download gallery.
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/3 p-6">
+              <h3 className="text-lg font-semibold text-blue-600 mb-3">Carousel / Album Downloader</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Carousel, also known as album or gallery posts have multiple photos, videos, or mixed content. If you need to download multiple photos from Instagram, the InstaGrab is the best to download gallery posts in high quality.
               </p>
             </div>
-            <div className="md:w-1/3 relative aspect-square rounded-lg overflow-hidden bg-purple-900/30 flex-shrink-0">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                  <ViewColumnsIcon className="h-6 w-6 text-white" />
-                </div>
+            <div className="md:w-1/3 bg-gradient-to-r from-purple-50 to-pink-50 flex items-center justify-center p-4">
+              <div className="relative w-full h-32 md:h-full">
+                <Image 
+                  src="/images/carousel-downloader.svg" 
+                  alt="Carousel / Album Downloader"
+                  className="rounded object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
             </div>
           </div>
