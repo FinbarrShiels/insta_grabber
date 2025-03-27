@@ -6,8 +6,6 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
-import DownloadGuide from '../components/DownloadGuide';
-import FeaturesSection from '../components/FeaturesSection';
 import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
@@ -40,14 +38,14 @@ export default function PhotoDownloaderPage() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ContentData | null>(null);
 
-  const handleUrlSubmit = async (submittedUrl: string) => {
-    setSubmittedUrl(submittedUrl);
+  const handleUrlSubmit = async (url: string) => {
+    setSubmittedUrl(url);
     setLoading(true);
     setError(null);
     setData(null);
 
     try {
-      const response = await fetchInstagramContent(submittedUrl);
+      const response = await fetchInstagramContent(url);
       if (response.status === 'error') {
         setError(response.message || 'Failed to fetch content');
         return;
@@ -83,47 +81,38 @@ export default function PhotoDownloaderPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
       <Header />
-      
-      <div className="container mx-auto px-4 mb-8 flex-grow max-w-[900px]">
+
+      <div className="container mx-auto px-4 pb-20 max-w-[900px]">
         {/* Hero Section */}
-        <div className="text-center py-8 md:py-12">
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 whitespace-nowrap xs:whitespace-normal">
+        <div className="text-center py-6 md:py-8">
+          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
             Instagram <span className="text-white">Photo Downloader</span>
           </h1>
-          <p className="text-white text-sm md:text-base text-sm md:text-base max-w-[900px] mx-auto">
+          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
             Download Instagram Photos in HD quality without watermarks
           </p>
         </div>
-        
+
         {/* Tab Navigation */}
-        <div className="mb-6">
+        <div className="mb-5">
           <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         </div>
-        
+
         {/* URL Input Form */}
-        <div className="mt-6 mb-8">
+        <div className="mb-8">
           <UrlInputForm onSubmit={handleUrlSubmit} />
         </div>
-        
+
         {/* Results Section */}
-        <ContentResults 
+        <ContentResults
           submittedUrl={submittedUrl}
           loading={loading}
           error={error}
           data={data}
           contentType={activeTab}
         />
-        
-        {/* Download Guide Section */}
-        <DownloadGuide />
-        
-        {/* Divider */}
-        <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
-        
-        {/* Features Section */}
-        <FeaturesSection />
       </div>
-      
+
       <Footer />
     </main>
   );
