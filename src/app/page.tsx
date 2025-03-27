@@ -6,9 +6,6 @@ import TabNavigation from './components/TabNavigation';
 import UrlInputForm from './components/UrlInputForm';
 import ContentResults from './components/ContentResults';
 import Footer from './components/Footer';
-import DownloadGuide from './components/DownloadGuide';
-import FeaturesSection from './components/FeaturesSection';
-import InfoCard from './components/InfoCard';
 import { fetchInstagramContent } from './utils/api';
 import { WebsiteJsonLd, SoftwareApplicationJsonLd, FAQJsonLd } from './components/JsonLd';
 
@@ -103,64 +100,43 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col bg-gradient-to-br from-purple-600 to-pink-500">
       {/* Structured Data */}
       <WebsiteJsonLd />
       <SoftwareApplicationJsonLd />
       <FAQJsonLd questions={faqData} />
       
-      <div className="bg-gradient-to-br from-purple-600 to-pink-500">
-        <Header />
-        
-        <div className="container mx-auto px-4 max-w-[900px]">
-          {/* Hero Section */}
-          <div className="text-center py-6 md:py-8">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
-              Instagram <span className="text-white">Downloader</span>
-            </h1>
-            <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
-              Download Instagram posts, reels, and stories in HD quality without watermarks
-            </p>
-          </div>
-          
-          {/* Tab Navigation */}
-          <div className="mb-5">
-            <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-          </div>
-          
-          {/* URL Input Form */}
-          <div className="pb-8">
-            <UrlInputForm onSubmit={handleUrlSubmit} />
-          </div>
-        </div>
-      </div>
+      <Header />
       
-      <div className="bg-white flex-grow">
-        <div className="container mx-auto px-4 max-w-[900px]">
-          {/* Results Section */}
-          <ContentResults 
-            submittedUrl={url}
-            loading={loading}
-            error={error}
-            data={data}
-            contentType={activeTab}
-          />
-          
-          {/* Info Card */}
-          <InfoCard />
-          
-          {/* Divider between InfoCard and DownloadGuide */}
-          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-purple-300/30 to-transparent my-10"></div>
-          
-          {/* Download Guide Section */}
-          <DownloadGuide />
-          
-          {/* Divider */}
-          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
-          
-          {/* Features Section */}
-          <FeaturesSection />
+      <div className="container mx-auto px-4 pb-20 max-w-[900px]">
+        {/* Hero Section */}
+        <div className="text-center py-6 md:py-8">
+          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
+            Instagram <span className="text-white">Downloader</span>
+          </h1>
+          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
+            Download Instagram posts, reels, and stories in HD quality without watermarks
+          </p>
         </div>
+        
+        {/* Tab Navigation */}
+        <div className="mb-5">
+          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        </div>
+        
+        {/* URL Input Form */}
+        <div className="mb-8">
+          <UrlInputForm onSubmit={handleUrlSubmit} />
+        </div>
+        
+        {/* Results Section */}
+        <ContentResults 
+          submittedUrl={url}
+          loading={loading}
+          error={error}
+          data={data}
+          contentType={activeTab}
+        />
       </div>
       
       <Footer />
