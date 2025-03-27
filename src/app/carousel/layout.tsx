@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Instagram Carousel Downloader - Save Multiple IG Posts',
   description: 'Download Instagram carousel posts with multiple photos and videos. Save entire IG slideshows without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram albums.',
-  keywords: 'instagram carousel downloader, download instagram slideshows, save instagram carousels, download IG album, instagram album saver',
   alternates: {
     canonical: 'https://www.instagrab.download/carousel',
   },

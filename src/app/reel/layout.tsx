@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Instagram Reel Downloader - Save Viral IG Reels in HD',
   description: 'Download Instagram reels in high quality. Save viral IG reels without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram reels.',
-  keywords: 'instagram reel downloader, download instagram reels, save instagram reels, download IG reels, HD instagram reels',
   alternates: {
     canonical: 'https://www.instagrab.download/reel',
   },

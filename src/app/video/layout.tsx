@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Instagram Video Downloader - Save Full HD IG Videos',
   description: 'Download Instagram videos in full HD quality. Save IG videos without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram video content.',
-  keywords: 'instagram video downloader, download instagram videos, save instagram videos, download IG videos, HD instagram videos',
   alternates: {
     canonical: 'https://www.instagrab.download/video',
   },

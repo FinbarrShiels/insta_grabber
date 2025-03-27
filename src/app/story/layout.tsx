@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Instagram Story Downloader - Save Expiring IG Stories',
   description: 'Download Instagram stories before they expire. Save IG stories without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram stories.',
-  keywords: 'instagram story downloader, download instagram stories, save instagram stories, download IG stories, HD instagram stories',
   alternates: {
     canonical: 'https://www.instagrab.download/story',
   },
