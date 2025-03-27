@@ -1,88 +1,48 @@
 'use client';
 
 import React from 'react';
-import { LinkIcon, ArrowDownTrayIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
+import {
+  ClipboardDocumentIcon,
+  ArrowDownTrayIcon,
+  ArrowPathIcon,
+} from '@heroicons/react/24/outline';
 
 const DownloadGuide: React.FC = () => {
   return (
-    <div className="my-10 py-8 px-4 sm:px-8 bg-white/10 backdrop-blur-sm rounded-xl">
-      <h2 className="text-center text-2xl md:text-3xl font-bold text-white mb-6">How to Download Instagram Content</h2>
-      <p className="text-sm md:text-base text-white/90 text-center mb-8 max-w-2xl mx-auto">
-        You must follow these three easy steps to download videos, reels, photos and carousels from Instagram.
-      </p>
+    <div className="py-8">
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
+        How to Download Instagram Content
+      </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Step 1 */}
-        <div className="flex flex-col items-center">
-          <div className="relative mb-4">
-            <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center">
-              <DevicePhoneMobileIcon className="h-7 w-7 text-pink-300" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-              1
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 shadow-sm border border-purple-200 flex flex-col items-center text-center">
+          <div className="rounded-full bg-purple-100 p-3 mb-4 border border-purple-200">
+            <ClipboardDocumentIcon className="h-8 w-8 text-purple-600" />
           </div>
-          <h3 className="text-white font-semibold text-lg mb-2">Copy URL</h3>
-          <p className="text-white/80 text-center text-sm md:text-base">
-            Open the Instagram application or website, copy the URL of the photo, video, reel, or carousel.
+          <h3 className="text-xl font-semibold text-purple-800 mb-2">Copy Link</h3>
+          <p className="text-gray-600">
+            Find the Instagram content you want to download and copy its URL from the address bar or share menu.
           </p>
-          <div className="mt-4 w-full">
-            <div className="relative w-full max-w-xs mx-auto">
-              <div className="w-4/5 h-12 bg-gray-800 text-white rounded-lg flex items-center justify-start font-medium pl-4 truncate">
-                https://instagr...
-              </div>
-              <div className="absolute right-0 top-0 w-1/4 h-12 bg-pink-600 rounded-r-lg flex items-center justify-center">
-                <LinkIcon className="h-5 w-5 text-white" />
-              </div>
-            </div>
-          </div>
         </div>
         
-        {/* Step 2 */}
-        <div className="flex flex-col items-center">
-          <div className="relative mb-4">
-            <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center">
-              <LinkIcon className="h-7 w-7 text-pink-300" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-              2
-            </div>
+        <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 shadow-sm border border-pink-200 flex flex-col items-center text-center">
+          <div className="rounded-full bg-pink-100 p-3 mb-4 border border-pink-200">
+            <ArrowPathIcon className="h-8 w-8 text-pink-600" />
           </div>
-          <h3 className="text-white font-semibold text-lg mb-2">Paste URL</h3>
-          <p className="text-white/80 text-center text-sm md:text-base">
-            Paste the URL into the text field above and click the &quot;Download&quot; button.
+          <h3 className="text-xl font-semibold text-pink-800 mb-2">Paste URL</h3>
+          <p className="text-gray-600">
+            Paste the copied link into the URL field at the top of this page and click the download button.
           </p>
-          <div className="mt-4 w-full flex justify-center">
-            <div className="w-4/5 h-12 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg flex items-center justify-center font-medium shadow-md">
-              Download
-            </div>
-          </div>
         </div>
         
-        {/* Step 3 */}
-        <div className="flex flex-col items-center">
-          <div className="relative mb-4">
-            <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center">
-              <ArrowDownTrayIcon className="h-7 w-7 text-pink-300" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-              3
-            </div>
+        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 shadow-sm border border-indigo-200 flex flex-col items-center text-center">
+          <div className="rounded-full bg-indigo-100 p-3 mb-4 border border-indigo-200">
+            <ArrowDownTrayIcon className="h-8 w-8 text-indigo-600" />
           </div>
-          <h3 className="text-white font-semibold text-lg mb-2">Save Content</h3>
-          <p className="text-white/80 text-center text-sm md:text-base">
-            Click the &quot;Save&quot; button and your content will be downloaded to your device.
+          <h3 className="text-xl font-semibold text-indigo-800 mb-2">Download</h3>
+          <p className="text-gray-600">
+            Our system will process the content and provide download options. Click to save it to your device.
           </p>
-          <div className="mt-4 w-full">
-            <div className="relative w-full max-w-xs mx-auto">
-              <div className="w-4/5 h-12 bg-gray-800 text-white rounded-lg flex items-center justify-center gap-2 font-medium">
-                <span>reel_123.mp4</span>
-              </div>
-              <div className="absolute right-0 top-0 w-1/4 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-r-lg flex items-center justify-center">
-                <ArrowDownTrayIcon className="h-5 w-5 text-white" />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

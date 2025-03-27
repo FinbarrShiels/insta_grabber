@@ -149,6 +149,9 @@ export default function Home() {
           {/* Info Card */}
           <InfoCard />
           
+          {/* Divider between InfoCard and DownloadGuide */}
+          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-purple-300/30 to-transparent my-10"></div>
+          
           {/* Download Guide Section */}
           <DownloadGuide />
           
