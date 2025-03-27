@@ -48,7 +48,7 @@ const DownloadGuide: React.FC = () => {
             </div>
             <h3 className="text-white font-medium mt-2">Paste the link</h3>
             <p className="text-white/80 text-sm mt-1">
-              Return to the InstaGrab website, paste the link into the input field and click the "Download" button.
+              Return to the InstaGrab website, paste the link into the input field and click the &quot;Download&quot; button.
             </p>
           </div>
         </div>
