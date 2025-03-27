@@ -102,53 +102,59 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
+    <main className="min-h-screen flex flex-col">
       {/* Structured Data */}
       <WebsiteJsonLd />
       <SoftwareApplicationJsonLd />
       <FAQJsonLd questions={faqData} />
       
-      <Header />
+      <div className="bg-gradient-to-br from-purple-600 to-pink-500">
+        <Header />
+        
+        <div className="container mx-auto px-4 max-w-[900px]">
+          {/* Hero Section */}
+          <div className="text-center py-6 md:py-8">
+            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3">
+              Instagram <span className="text-white">Downloader</span>
+            </h1>
+            <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
+              Download Instagram posts, reels, and stories in HD quality without watermarks
+            </p>
+          </div>
+          
+          {/* Tab Navigation */}
+          <div className="mb-5">
+            <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+          </div>
+          
+          {/* URL Input Form */}
+          <div className="pb-8">
+            <UrlInputForm onSubmit={handleUrlSubmit} />
+          </div>
+        </div>
+      </div>
       
-      <div className="container mx-auto px-4 mb-8 flex-grow max-w-[900px]">
-        {/* Hero Section */}
-        <div className="text-center py-8 md:py-12">
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
-            Instagram <span className="text-white">Downloader</span>
-          </h1>
-          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
-            Download Instagram posts, reels, and stories in HD quality without watermarks
-          </p>
+      <div className="bg-white flex-grow">
+        <div className="container mx-auto px-4 max-w-[900px]">
+          {/* Results Section */}
+          <ContentResults 
+            submittedUrl={url}
+            loading={loading}
+            error={error}
+            data={data}
+            contentType={activeTab}
+          />
+          
+          {/* Download Guide Section */}
+          <DownloadGuide />
+          
+          {/* Divider */}
+          <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
+          
+          {/* Features Section */}
+          <FeaturesSection />
         </div>
-        
-        {/* Tab Navigation */}
-        <div className="mb-6">
-          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-        </div>
-        
-        {/* URL Input Form */}
-        <div className="mt-6 mb-8">
-          <UrlInputForm onSubmit={handleUrlSubmit} />
-        </div>
-        
-        {/* Results Section */}
-        <ContentResults 
-          submittedUrl={url}
-          loading={loading}
-          error={error}
-          data={data}
-          contentType={activeTab}
-        />
-        
-        {/* Download Guide Section */}
-        <DownloadGuide />
-        
-        {/* Divider */}
-        <div className="w-full max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-pink-300/30 to-transparent my-16"></div>
-        
-        {/* Features Section */}
-        <FeaturesSection />
-    </div>
+      </div>
       
       <Footer />
     </main>

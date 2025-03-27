@@ -8,7 +8,7 @@ import Link from 'next/link';
 const Header: React.FC = () => {
   return (
     <div className="w-full bg-gradient-to-r from-purple-700 to-pink-600">
-      <header className="flex justify-between items-center py-4 sm:py-6 max-w-[900px] mx-auto px-4">
+      <header className="flex justify-between items-center py-3 sm:py-4 max-w-[900px] mx-auto px-4">
         <div className="flex-shrink-0">
           <Link href="/" aria-label="InstaGrab Home">
             <Logo />
@@ -18,15 +18,15 @@ const Header: React.FC = () => {
         <div className="flex items-center space-x-3 sm:space-x-5">
           <Link
             href="/faq"
-            className="text-white group flex items-center gap-1.5 text-sm sm:text-base font-medium hover:text-white/80 transition-colors"
+            className="text-white group flex items-center gap-1 text-sm font-medium hover:text-white/80 transition-colors"
             aria-label="Frequently Asked Questions"
           >
-            <QuestionMarkCircleIcon className="h-5 w-5 text-white/80 group-hover:text-white/90 transition-colors" />
+            <QuestionMarkCircleIcon className="h-4 w-4 text-white/80 group-hover:text-white/90 transition-colors" />
             <span>FAQ</span>
           </Link>
 
           <Menu as="div" className="relative">
-            <Menu.Button className="flex items-center gap-1 text-white text-sm sm:text-base font-medium hover:text-pink-200 transition-colors">
+            <Menu.Button className="flex items-center gap-1 text-white text-sm font-medium hover:text-pink-200 transition-colors">
               <span>EN</span>
               <ChevronDownIcon className="h-4 w-4" />
             </Menu.Button>
