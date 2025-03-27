@@ -8,6 +8,7 @@ import ContentResults from './components/ContentResults';
 import Footer from './components/Footer';
 import DownloadGuide from './components/DownloadGuide';
 import FeaturesSection from './components/FeaturesSection';
+import InfoCard from './components/InfoCard';
 import { fetchInstagramContent } from './utils/api';
 import { WebsiteJsonLd, SoftwareApplicationJsonLd, FAQJsonLd } from './components/JsonLd';
 
@@ -144,6 +145,9 @@ export default function Home() {
             data={data}
             contentType={activeTab}
           />
+          
+          {/* Info Card */}
+          <InfoCard />
           
           {/* Download Guide Section */}
           <DownloadGuide />
