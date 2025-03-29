@@ -35,22 +35,26 @@ export async function getPresignedDownloadUrl(key: string, expiresIn = 3600): Pr
 }
 
 /**
- * Upload media content to R2 storage
- * @param key The key to use for the uploaded object
- * @param content The content to upload
- * @param contentType The content type of the media
+ * Upload content to R2 using streaming
+ * @param key The object key in the R2 bucket
+ * @param stream The readable stream to upload
+ * @param contentType The content type of the file
  * @returns The key of the uploaded object
  */
-export async function uploadToR2(
-  key: string, 
-  content: Buffer | Uint8Array, 
+export async function uploadToR2Stream(
+  key: string,
+  stream: ReadableStream | null,
   contentType: string
 ): Promise<string> {
+  if (!stream) {
+    throw new Error('Stream is required for upload');
+  }
+
   await r2Client.send(
     new PutObjectCommand({
       Bucket: R2_BUCKET_NAME,
       Key: key,
-      Body: content,
+      Body: stream,
       ContentType: contentType,
       CacheControl: 'public, max-age=31536000', // Cache for 1 year
     })
@@ -68,15 +72,15 @@ function generateRandomCode(): string {
 }
 
 /**
- * Store Instagram media in R2 and return a presigned URL
+ * Store Instagram media in R2 and return a presigned URL using streaming
  * @param url Instagram media URL
  * @param type Media type ('image' or 'video')
  * @param postId Post identifier (shortcode or username)
  * @returns Presigned URL for accessing the stored media
  */
 export async function storeAndGetMediaUrl(
-  url: string, 
-  type: 'image' | 'video', 
+  url: string,
+  type: 'image' | 'video',
   postId: string
 ): Promise<string> {
   try {
@@ -88,18 +92,16 @@ export async function storeAndGetMediaUrl(
     const randomCode = generateRandomCode();
     const key = `${safePostId}-${randomCode}.${extension}`;
     
-    // Fetch the content from Instagram
+    // Fetch with streaming
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch media: ${response.statusText}`);
     }
     
-    const contentBuffer = await response.arrayBuffer();
-    
-    // Upload to R2
-    await uploadToR2(
-      key, 
-      new Uint8Array(contentBuffer), 
+    // Stream directly to R2
+    await uploadToR2Stream(
+      key,
+      response.body,
       type === 'image' ? 'image/jpeg' : 'video/mp4'
     );
     
@@ -110,4 +112,13 @@ export async function storeAndGetMediaUrl(
     // If R2 storage fails, return the original URL as fallback
     return url;
   }
-} 
+}
+
+// Export all R2 functions
+export const r2 = {
+  storeAndGetMediaUrl,
+  getPresignedDownloadUrl,
+  uploadToR2Stream
+};
+
+export default r2; 
