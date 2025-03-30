@@ -96,9 +96,12 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon-192.svg" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1990518122312332"
-          crossOrigin="anonymous"></script>
       </head>
+      <Script
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1990518122312332"
+        strategy="afterInteractive"
+        crossOrigin="anonymous"
+      />
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-WMCEB4H2C6"
         strategy="afterInteractive"
