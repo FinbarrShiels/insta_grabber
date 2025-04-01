@@ -98,7 +98,7 @@ const FaqPage: React.FC = () => {
     <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
       <Header />
       
-      <div className="container mx-auto px-4 py-12 flex-grow max-w-[900px]">
+      <div className="container mx-auto px-4 py-12 flex-grow max-w-[984px]">
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Frequently Asked Questions

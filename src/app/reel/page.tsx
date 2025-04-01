@@ -6,6 +6,8 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
+import DemoSection from '../components/DemoSection';
+import DownloadSteps from '../components/DownloadSteps';
 import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
@@ -79,16 +81,16 @@ export default function ReelDownloaderPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
+    <main className="min-h-screen bg-gradient-to-br from-brand-purple-dark via-brand-purple to-brand-pink flex flex-col">
       <Header />
       
-      <div className="container mx-auto px-4 pb-20 max-w-[900px]">
+      <div className="container mx-auto px-4 pb-20 max-w-[984px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             Instagram <span className="text-white">Reel Downloader</span>
           </h1>
-          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
+          <p className="text-white text-sm md:text-base max-w-[984px] mx-auto">
             Download Instagram Reels in HD quality without watermarks
           </p>
         </div>
@@ -111,6 +113,17 @@ export default function ReelDownloaderPage() {
           data={data}
           contentType={activeTab}
         />
+        
+        {/* Demo Section */}
+        <DemoSection 
+          title="Download Instagram Reel Videos"
+          content="Our Instagram Reels Downloader lets you save trending, entertaining, and educational Reels to watch offline. Get the original high-quality video without compression or watermarks. Perfect for saving content creators' tutorials, dance challenges, or any short-form videos you want to keep."
+          imageSrc="/images/reels.png"
+          imageAlt="Instagram Reel Downloader Demo"
+        />
+        
+        {/* Download Steps Section */}
+        <DownloadSteps />
       </div>
       
       <Footer />

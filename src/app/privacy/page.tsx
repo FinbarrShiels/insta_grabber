@@ -9,7 +9,7 @@ const PrivacyPage: React.FC = () => {
     <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
       <Header />
       
-      <div className="container mx-auto px-4 mb-8 flex-grow max-w-[900px]">
+      <div className="container mx-auto px-4 mb-8 flex-grow max-w-[984px]">
         <div className="py-8 md:py-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6">Privacy Policy</h1>
           

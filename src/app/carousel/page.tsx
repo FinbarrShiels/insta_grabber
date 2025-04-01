@@ -6,6 +6,8 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
+import DemoSection from '../components/DemoSection';
+import DownloadSteps from '../components/DownloadSteps';
 import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
@@ -79,17 +81,17 @@ export default function CarouselDownloaderPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
+    <main className="min-h-screen bg-gradient-to-br from-brand-purple-dark via-brand-purple to-brand-pink flex flex-col">
       <Header />
       
-      <div className="container mx-auto px-4 pb-20 max-w-[900px]">
+      <div className="container mx-auto px-4 pb-20 max-w-[984px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
-            Instagram <span className="text-white">Carousel Downloader</span>
+            Instagram <span className="text-brand-teal-light">Carousel Downloader</span>
           </h1>
-          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
-            Download Instagram Carousel Posts in HD quality without watermarks
+          <p className="text-white text-sm md:text-base max-w-[984px] mx-auto">
+            Download Instagram Carousel/Albums with all photos and videos in one click
           </p>
         </div>
         
@@ -111,6 +113,17 @@ export default function CarouselDownloaderPage() {
           data={data}
           contentType={activeTab}
         />
+        
+        {/* Demo Section */}
+        <DemoSection 
+          title="Download Instagram Carousels"
+          content="Save all images and videos from Instagram carousel posts with a single click. Our carousel downloader extracts every slide from multi-image posts, allowing you to download complete collections easily. Perfect for saving product galleries, photo series, or any multi-image posts you want to keep."
+          imageSrc="/images/carousel.png"
+          imageAlt="Instagram Carousel Downloader Demo"
+        />
+        
+        {/* Download Steps Section */}
+        <DownloadSteps />
       </div>
       
       <Footer />

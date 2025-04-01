@@ -6,6 +6,9 @@ import TabNavigation from './components/TabNavigation';
 import UrlInputForm from './components/UrlInputForm';
 import ContentResults from './components/ContentResults';
 import Footer from './components/Footer';
+import DemoSection from './components/DemoSection';
+import DownloadSteps from './components/DownloadSteps';
+import FeaturesSection from './components/FeaturesSection';
 import { fetchInstagramContent } from './utils/api';
 import { WebsiteJsonLd, SoftwareApplicationJsonLd, FAQJsonLd } from './components/JsonLd';
 
@@ -108,13 +111,13 @@ export default function Home() {
       
       <Header />
       
-      <div className="container mx-auto px-4 pb-20 max-w-[900px]">
+      <div className="container mx-auto px-4 pb-20 max-w-[984px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             Instagram <span className="text-white">Downloader</span>
           </h1>
-          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
+          <p className="text-white text-sm md:text-base max-w-[984px] mx-auto">
             Download Instagram posts, reels, and stories in HD quality without watermarks
           </p>
         </div>
@@ -137,6 +140,20 @@ export default function Home() {
           data={data}
           contentType={activeTab}
         />
+        
+        {/* Demo Section */}
+        <DemoSection 
+          title="Download Instagram Content"
+          content="InstaGrab makes it simple to download any Instagram content in high quality. Whether it's photos, videos, reels, stories, or carousels, our tool handles it all with just a simple paste of the URL. No registration, no watermarks, just fast and reliable downloading."
+          imageSrc="/images/photo.png"
+          imageAlt="Instagram Downloader Demo"
+        />
+        
+        {/* Download Steps Section */}
+        <DownloadSteps />
+        
+        {/* Features Section */}
+        <FeaturesSection />
       </div>
       
       <Footer />

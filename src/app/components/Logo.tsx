@@ -3,9 +3,13 @@ import Image from 'next/image';
 
 interface LogoProps {
   large?: boolean;
+  darkMode?: boolean;
 }
 
-const Logo: React.FC<LogoProps> = ({ large = false }) => {
+const Logo: React.FC<LogoProps> = ({ large = false, darkMode = true }) => {
+  const textColorMain = darkMode ? "text-white" : "text-gray-800";
+  const textColorAccent = darkMode ? "text-pink-300" : "text-brand-teal";
+  
   if (large) {
     return (
       <div className="flex flex-col items-center">
@@ -19,9 +23,9 @@ const Logo: React.FC<LogoProps> = ({ large = false }) => {
             priority
           />
         </div>
-        <div className="text-3xl font-bold text-white">
+        <div className={`text-3xl font-bold ${textColorMain}`}>
           <span>Insta</span>
-          <span className="text-pink-200">Grab</span>
+          <span className={textColorAccent}>Grab</span>
         </div>
       </div>
     );
@@ -39,9 +43,9 @@ const Logo: React.FC<LogoProps> = ({ large = false }) => {
           priority
         />
       </div>
-      <div className="text-xl sm:text-2xl font-bold text-white">
+      <div className={`text-xl sm:text-2xl font-bold ${textColorMain}`}>
         <span>Insta</span>
-        <span className="text-pink-300">Grab</span>
+        <span className={textColorAccent}>Grab</span>
       </div>
     </div>
   );

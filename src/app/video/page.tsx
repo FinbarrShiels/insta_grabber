@@ -6,6 +6,8 @@ import TabNavigation from '../components/TabNavigation';
 import UrlInputForm from '../components/UrlInputForm';
 import ContentResults from '../components/ContentResults';
 import Footer from '../components/Footer';
+import DemoSection from '../components/DemoSection';
+import DownloadSteps from '../components/DownloadSteps';
 import { fetchInstagramContent } from '../utils/api';
 
 interface Resource {
@@ -82,13 +84,13 @@ export default function VideoDownloaderPage() {
     <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-500 flex flex-col">
       <Header />
       
-      <div className="container mx-auto px-4 pb-20 max-w-[900px]">
+      <div className="container mx-auto px-4 pb-20 max-w-[984px]">
         {/* Hero Section */}
         <div className="text-center py-6 md:py-8">
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             Instagram <span className="text-white">Video Downloader</span>
           </h1>
-          <p className="text-white text-sm md:text-base max-w-[900px] mx-auto">
+          <p className="text-white text-sm md:text-base max-w-[984px] mx-auto">
             Download Instagram Videos in HD quality without watermarks
           </p>
         </div>
@@ -111,6 +113,17 @@ export default function VideoDownloaderPage() {
           data={data}
           contentType={activeTab}
         />
+        
+        {/* Demo Section */}
+        <DemoSection 
+          title="Download Instagram Videos"
+          content="Save Instagram videos in high definition with our Video Downloader. Our tool allows you to download any Instagram video at its maximum available quality without watermarks. Whether it's a tutorial, entertainment, or personal memory, download and keep your favorite videos offline."
+          imageSrc="/images/video.png"
+          imageAlt="Instagram Video Downloader Demo"
+        />
+        
+        {/* Download Steps Section */}
+        <DownloadSteps />
       </div>
       
       <Footer />
