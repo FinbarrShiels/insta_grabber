@@ -1,6 +1,5 @@
 import React from 'react';
-import { ArrowDownTrayIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const DownloadSteps: React.FC = () => {
   const steps = [
