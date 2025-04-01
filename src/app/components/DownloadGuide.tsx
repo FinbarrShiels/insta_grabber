@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { ClipboardDocumentIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 
 const DownloadGuide: React.FC = () => {
   return (

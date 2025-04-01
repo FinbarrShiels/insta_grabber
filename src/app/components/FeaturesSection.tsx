@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 
 interface FeatureItem {
   title: string;
