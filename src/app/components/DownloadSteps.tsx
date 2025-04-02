@@ -38,7 +38,8 @@ const DownloadSteps: React.FC = () => {
               width: "100%",
               display: "block",
               marginLeft: 0,
-              marginRight: 0
+              marginRight: 0,
+              objectPosition: "center top"
             }}
           />
         </div>
@@ -59,7 +60,8 @@ const DownloadSteps: React.FC = () => {
               width: "100%",
               display: "block",
               marginLeft: 0,
-              marginRight: 0
+              marginRight: 0,
+              objectPosition: "center top"
             }}
           />
         </div>
