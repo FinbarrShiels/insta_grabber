@@ -8,7 +8,7 @@ const DownloadSteps: React.FC = () => {
       icon: (
         <div className="w-full h-auto p-0 m-0 overflow-hidden">
           <img 
-            src="/images/copy-new.svg" 
+            src="/images/copy.svg" 
             alt="Copy Link" 
             className="w-full h-auto object-cover rounded-t-xl" 
             style={{ 
@@ -29,7 +29,7 @@ const DownloadSteps: React.FC = () => {
       icon: (
         <div className="w-full h-auto p-0 m-0 overflow-hidden">
           <img 
-            src="/images/paste-new.svg" 
+            src="/images/paste.svg" 
             alt="Paste URL" 
             className="w-full h-auto object-cover rounded-t-xl" 
             style={{ 
@@ -50,7 +50,7 @@ const DownloadSteps: React.FC = () => {
       icon: (
         <div className="w-full h-auto p-0 m-0 overflow-hidden">
           <img 
-            src="/images/download-new.svg" 
+            src="/images/download.svg" 
             alt="Download" 
             className="w-full h-auto object-cover rounded-t-xl" 
             style={{ 
