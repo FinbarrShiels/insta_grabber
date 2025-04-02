@@ -6,18 +6,13 @@ const DownloadSteps: React.FC = () => {
       title: 'Copy Link',
       description: 'Find the Instagram content you want to download and copy its URL from the address bar or share button.',
       icon: (
-        <div className="w-full h-auto p-0 m-0 overflow-hidden">
+        <div className="w-full aspect-[16/9] bg-[#ff7aa2] flex items-center justify-center p-0 m-0 overflow-hidden">
           <img 
             src="/images/copy.png" 
             alt="Copy Link" 
-            className="w-full h-auto object-cover rounded-t-xl" 
+            className="w-4/5 h-auto object-contain" 
             style={{ 
-              maxHeight: "220px",
-              minHeight: "180px",
-              width: "100%",
-              display: "block",
-              marginLeft: 0,
-              marginRight: 0
+              maxWidth: "280px"
             }}
           />
         </div>
@@ -27,19 +22,13 @@ const DownloadSteps: React.FC = () => {
       title: 'Paste URL',
       description: 'Paste the copied Instagram URL into the search bar above.',
       icon: (
-        <div className="w-full h-auto p-0 m-0 overflow-hidden">
+        <div className="w-full aspect-[16/9] bg-[#ff7aa2] flex items-center justify-center p-0 m-0 overflow-hidden">
           <img 
             src="/images/paste.png" 
             alt="Paste URL" 
-            className="w-full h-auto object-cover rounded-t-xl" 
+            className="w-4/5 h-auto object-contain" 
             style={{ 
-              maxHeight: "220px",
-              minHeight: "180px",
-              width: "100%",
-              display: "block",
-              marginLeft: 0,
-              marginRight: 0,
-              objectPosition: "center top"
+              maxWidth: "280px"
             }}
           />
         </div>
@@ -49,19 +38,13 @@ const DownloadSteps: React.FC = () => {
       title: 'Download',
       description: 'Click the download button that appears to save your high-quality Instagram content.',
       icon: (
-        <div className="w-full h-auto p-0 m-0 overflow-hidden">
+        <div className="w-full aspect-[16/9] bg-[#ff7aa2] flex items-center justify-center p-0 m-0 overflow-hidden">
           <img 
             src="/images/download.png" 
             alt="Download" 
-            className="w-full h-auto object-cover rounded-t-xl" 
+            className="w-4/5 h-auto object-contain" 
             style={{ 
-              maxHeight: "220px",
-              minHeight: "180px",
-              width: "100%",
-              display: "block",
-              marginLeft: 0,
-              marginRight: 0,
-              objectPosition: "center top"
+              maxWidth: "280px"
             }}
           />
         </div>
