@@ -1,26 +1,25 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Instagram Reel Downloader - Save Viral IG Reels in HD',
-  description: 'Download Instagram reels in high quality. Save viral IG reels without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram reels.',
-  alternates: {
-    canonical: 'https://www.instagrab.download/reel',
-  },
+  title: 'Instagram Reel Downloader - Download HD Reels Without Watermark',
+  description: 'Download Instagram Reels in HD quality without watermarks. Free, fast, and easy to use Instagram Reel downloader.',
+  keywords: 'instagram reel downloader, download instagram reels, instagram reel saver, save instagram reels, instagram reel download',
   openGraph: {
-    title: 'Instagram Reel Downloader - Save Viral IG Reels in HD',
-    description: 'Download Instagram reels in high quality. Save viral IG reels without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram reels.',
+    title: 'Instagram Reel Downloader - Download HD Reels Without Watermark',
+    description: 'Download Instagram Reels in HD quality without watermarks. Free, fast, and easy to use Instagram Reel downloader.',
     url: 'https://www.instagrab.download/reel',
-    siteName: 'InstaGrab - Instagram Content Downloader',
+    siteName: 'InstaGrab',
     images: [
       {
-        url: 'https://www.instagrab.download/og-reel.jpg',
+        url: 'https://www.instagrab.download/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Reel Downloader',
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://www.instagrab.download/reel',
   },
   robots: {
     index: true,

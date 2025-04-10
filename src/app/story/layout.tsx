@@ -1,26 +1,25 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Instagram Story Downloader - Save Expiring IG Stories',
-  description: 'Download Instagram stories before they expire. Save IG stories without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram stories.',
-  alternates: {
-    canonical: 'https://www.instagrab.download/story',
-  },
+  title: 'Instagram Story Downloader - Download HD Stories Without Watermark',
+  description: 'Download Instagram Stories in HD quality without watermarks. Free, fast, and easy to use Instagram Story downloader.',
+  keywords: 'instagram story downloader, download instagram stories, instagram story saver, save instagram stories, instagram story download',
   openGraph: {
-    title: 'Instagram Story Downloader - Save Expiring IG Stories',
-    description: 'Download Instagram stories before they expire. Save IG stories without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram stories.',
+    title: 'Instagram Story Downloader - Download HD Stories Without Watermark',
+    description: 'Download Instagram Stories in HD quality without watermarks. Free, fast, and easy to use Instagram Story downloader.',
     url: 'https://www.instagrab.download/story',
-    siteName: 'InstaGrab - Instagram Content Downloader',
+    siteName: 'InstaGrab',
     images: [
       {
-        url: 'https://www.instagrab.download/og-story.jpg',
+        url: 'https://www.instagrab.download/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Story Downloader',
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://www.instagrab.download/story',
   },
   robots: {
     index: true,
