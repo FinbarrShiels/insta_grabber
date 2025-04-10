@@ -66,12 +66,12 @@ const FeaturesSection: React.FC = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-5 h-5">
                         <path d="M8 5v14l11-7z" />
                       </svg>
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
-            
+          </div>
+                )}
+        </div>
+      </div>
+      
             {/* Content section */}
             <div className="w-full md:w-3/5 p-4 md:p-6 h-auto md:h-full overflow-auto">
               <h3 className="text-2xl md:text-4xl font-bold text-[#2dd4bf] mb-2">
