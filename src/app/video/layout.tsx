@@ -1,26 +1,25 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Instagram Video Downloader - Save Full HD IG Videos',
-  description: 'Download Instagram videos in full HD quality. Save IG videos without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram video content.',
-  alternates: {
-    canonical: 'https://www.instagrab.download/video',
-  },
+  title: 'Instagram Video Downloader - Download HD Videos Without Watermark',
+  description: 'Download Instagram videos in HD quality without watermarks. Free, fast, and easy to use Instagram video downloader.',
+  keywords: 'instagram video downloader, download instagram videos, instagram video saver, save instagram videos, instagram video download',
   openGraph: {
-    title: 'Instagram Video Downloader - Save Full HD IG Videos',
-    description: 'Download Instagram videos in full HD quality. Save IG videos without watermarks. Fast, free, and no registration needed. Perfect for saving your favorite Instagram video content.',
+    title: 'Instagram Video Downloader - Download HD Videos Without Watermark',
+    description: 'Download Instagram videos in HD quality without watermarks. Free, fast, and easy to use Instagram video downloader.',
     url: 'https://www.instagrab.download/video',
-    siteName: 'InstaGrab - Instagram Content Downloader',
+    siteName: 'InstaGrab',
     images: [
       {
-        url: 'https://www.instagrab.download/og-video.jpg',
+        url: 'https://www.instagrab.download/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Instagram Video Downloader',
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://www.instagrab.download/video',
   },
   robots: {
     index: true,
