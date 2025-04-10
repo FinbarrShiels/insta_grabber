@@ -9,6 +9,7 @@ import Footer from '../components/Footer';
 import DemoSection from '../components/DemoSection';
 import DownloadSteps from '../components/DownloadSteps';
 import { fetchInstagramContent } from '../utils/api';
+import { Metadata } from 'next';
 
 interface Resource {
   type: 'image' | 'video';
@@ -32,6 +33,29 @@ interface ContentData {
   info: ContentInfo;
   error?: string;
 }
+
+export const metadata: Metadata = {
+  title: 'Instagram Photo Downloader - Download HD Photos Without Watermark',
+  description: 'Download Instagram photos in HD quality without watermarks. Free, fast, and easy to use Instagram photo downloader.',
+  keywords: 'instagram photo downloader, download instagram photos, instagram photo saver, save instagram photos, instagram photo download',
+  openGraph: {
+    title: 'Instagram Photo Downloader - Download HD Photos Without Watermark',
+    description: 'Download Instagram photos in HD quality without watermarks. Free, fast, and easy to use Instagram photo downloader.',
+    url: 'https://www.instagrab.download/photo',
+    siteName: 'InstaGrab',
+    images: [
+      {
+        url: 'https://www.instagrab.download/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Instagram Photo Downloader',
+      },
+    ],
+  },
+  alternates: {
+    canonical: 'https://www.instagrab.download/photo',
+  },
+};
 
 export default function PhotoDownloaderPage() {
   const [activeTab, setActiveTab] = useState('photo');

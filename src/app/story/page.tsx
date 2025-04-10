@@ -9,6 +9,7 @@ import Footer from '../components/Footer';
 import DemoSection from '../components/DemoSection';
 import DownloadSteps from '../components/DownloadSteps';
 import { fetchInstagramContent } from '../utils/api';
+import { Metadata } from 'next';
 
 interface Resource {
   type: 'image' | 'video';
@@ -32,6 +33,29 @@ interface ContentData {
   info: ContentInfo;
   error?: string;
 }
+
+export const metadata: Metadata = {
+  title: 'Instagram Story Downloader - Download HD Stories Without Watermark',
+  description: 'Download Instagram Stories in HD quality without watermarks. Free, fast, and easy to use Instagram Story downloader.',
+  keywords: 'instagram story downloader, download instagram stories, instagram story saver, save instagram stories, instagram story download',
+  openGraph: {
+    title: 'Instagram Story Downloader - Download HD Stories Without Watermark',
+    description: 'Download Instagram Stories in HD quality without watermarks. Free, fast, and easy to use Instagram Story downloader.',
+    url: 'https://www.instagrab.download/story',
+    siteName: 'InstaGrab',
+    images: [
+      {
+        url: 'https://www.instagrab.download/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Instagram Story Downloader',
+      },
+    ],
+  },
+  alternates: {
+    canonical: 'https://www.instagrab.download/story',
+  },
+};
 
 export default function StoryDownloaderPage() {
   const [activeTab, setActiveTab] = useState('story');
